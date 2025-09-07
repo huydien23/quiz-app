@@ -482,21 +482,229 @@ input[type="radio"]:checked::after {
     background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
 }
 
-/* Mobile Responsive Enhancements */
+/* Enhanced Mobile Responsive Design */
 @media (max-width: 768px) {
-    .quiz-card {
-        margin: 1rem;
-        border-radius: 16px;
+    body {
+        padding: 0;
+        margin: 0;
     }
     
+    .container {
+        padding: 0.5rem;
+    }
+    
+    /* Start Screen Mobile Optimization */
+    .quiz-card {
+        margin: 0.5rem;
+        padding: 1.5rem;
+        border-radius: 12px;
+        min-height: auto;
+    }
+    
+    /* Title and Text Adjustments */
+    h1 {
+        font-size: 2.5rem !important;
+        line-height: 1.2;
+        margin-bottom: 1rem !important;
+    }
+    
+    p {
+        font-size: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    /* Button Optimizations */
     .btn {
-        padding: 12px 24px;
+        padding: 14px 20px;
+        font-size: 1rem;
+        width: 100%;
+        max-width: 280px;
+        margin: 0 auto;
+        display: block;
+        border-radius: 12px;
+    }
+    
+    #startBtn {
+        padding: 16px 24px;
+        font-size: 1.1rem;
+        margin-top: 1rem;
+    }
+    
+    /* Quiz Header Mobile */
+    .quiz-header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+        text-align: center;
+    }
+    
+    .quiz-header .flex {
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+    }
+    
+    /* Timer Mobile */
+    .timer {
+        font-size: 1.1rem;
+        padding: 10px 16px;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Question Content Mobile */
+    .quiz-card {
+        padding: 1.5rem;
+    }
+    
+    #questionText {
+        font-size: 1.1rem !important;
+        line-height: 1.5;
+        margin-bottom: 1.5rem !important;
+    }
+    
+    /* Answer Options Mobile */
+    .answer-option {
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        border-radius: 12px;
+        font-size: 1rem;
+    }
+    
+    .answer-option label {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .answer-option input[type="radio"] {
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+    
+    /* Navigation Mobile */
+    .flex.justify-between {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    #questionNumbers {
+        order: -1;
+        gap: 0.5rem;
+        justify-content: center;
+        max-width: 100%;
+        overflow-x: auto;
+        padding: 0.5rem 0;
+    }
+    
+    .question-number {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+    
+    /* Navigation Buttons */
+    .flex.justify-between > button {
+        width: 45%;
+        padding: 12px 16px;
         font-size: 0.9rem;
     }
     
-    .timer {
-        font-size: 1rem;
-        padding: 8px 16px;
+    /* Results Screen Mobile */
+    .result-card {
+        margin: 0.5rem;
+        padding: 1.5rem;
+    }
+    
+    .score-display {
+        font-size: 2.5rem;
+    }
+    
+    .percentage-display {
+        font-size: 2rem;
+    }
+    
+    /* Review Screen Mobile */
+    .max-w-4xl {
+        max-width: 100%;
+        margin: 0;
+        padding: 0.5rem;
+    }
+    
+    /* Modal Mobile */
+    .max-w-2xl {
+        max-width: 95vw;
+        margin: 1rem;
+    }
+    
+    .print-option-card {
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    /* Instructions List Mobile */
+    ul li {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        font-size: 0.95rem;
+    }
+    
+    ul li span:first-child {
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+    
+    /* Touch-friendly adjustments */
+    button, .answer-option, .question-number {
+        min-height: 44px; /* iOS recommended touch target */
+    }
+    
+    /* Improved spacing for readability */
+    .space-y-4 > * + * {
+        margin-top: 1rem;
+    }
+    
+    .space-y-3 > * + * {
+        margin-top: 0.75rem;
+    }
+}
+
+/* Extra Small Mobile Devices */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2rem !important;
+    }
+    
+    .quiz-card {
+        margin: 0.25rem;
+        padding: 1rem;
+    }
+    
+    .quiz-header {
+        padding: 0.75rem;
+    }
+    
+    #questionText {
+        font-size: 1rem !important;
+    }
+    
+    .answer-option {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+    
+    .question-number {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+    }
+    
+    .btn {
+        padding: 12px 16px;
+        font-size: 0.9rem;
     }
     
     .score-display {
@@ -505,11 +713,6 @@ input[type="radio"]:checked::after {
     
     .percentage-display {
         font-size: 1.5rem;
-    }
-    
-    .question-number {
-        width: 40px;
-        height: 40px;
     }
 }
 
