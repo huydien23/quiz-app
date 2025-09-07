@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ứng Dụng Thi Trắc Nghiệm Python</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Start Screen -->
+    <div id="startScreen" class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto quiz-card p-8 text-center">
+            <div class="mb-8">
+                <div class="text-6xl mb-4">🐍</div>
+                <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-6">Bài Thi Trắc Nghiệm Python</h1>
+                <p class="text-gray-600 mb-6 text-lg">Kiểm tra kiến thức Python của bạn với 40 câu hỏi ngẫu nhiên</p>
+            </div>
+            <div class="quiz-card p-6 mb-8 bg-gradient-to-r from-blue-50 to-purple-50">
+                <p class="text-blue-800 font-semibold mb-4"><strong>📋 Hướng dẫn:</strong></p>
+                <ul class="text-left text-blue-700 space-y-3">
+                    <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> 40 câu hỏi được chọn ngẫu nhiên từ ngân hàng câu hỏi</li>
+                    <li class="flex items-center"><span class="text-green-500 mr-2">⏱️</span> Thời gian làm bài: 60 phút</li>
+                    <li class="flex items-center"><span class="text-green-500 mr-2">🎯</span> Chọn đáp án đúng nhất cho mỗi câu hỏi</li>
+                    <li class="flex items-center"><span class="text-green-500 mr-2">🔄</span> Bạn có thể chuyển đổi giữa các câu hỏi</li>
+                </ul>
+            </div>
+            <button id="startBtn" class="btn btn-primary py-4 px-10 text-lg font-bold shadow-xl">
+                🚀 Bắt Đầu Thi
+            </button>
+        </div>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="quizScreen" class="container mx-auto px-4 py-8 hidden">
+        <!-- Header with timer -->
+        <div class="max-w-4xl mx-auto mb-6">
+            <div class="quiz-header p-6 flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full font-semibold">
+                        📋 Câu <span id="currentQuestion">1</span> / <span id="totalQuestions">40</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="timer" class="timer">⏱️ 60:00</div>
+                    <button id="resetQuizBtn" class="btn btn-secondary py-2 px-4 text-sm font-bold" title="Reset câu trả lời hiện tại">
+                        🔄 Reset
+                    </button>
+                    <button id="cancelQuizBtn" class="btn btn-secondary py-2 px-4 text-sm font-bold" title="Hủy bài thi">
+                        ❌ Hủy
+                    </button>
+                    <button id="printQuizBtn" class="btn btn-print py-2 px-4 text-sm font-bold" title="In đề thi">
+                        🖨️ In Đề
+                    </button>
+                    <button id="submitBtn" class="btn btn-success py-3 px-6 font-bold">
+                        📋 Nộp Bài
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Content -->
+        <div class="max-w-4xl mx-auto">
+            <div class="quiz-card p-8 mb-6">
+                <div class="mb-8">
+                    <div class="text-2xl font-bold mb-2 text-blue-600">🤔 Câu hỏi</div>
+                    <div id="questionText" class="text-xl mb-8 font-medium text-gray-800 leading-relaxed"></div>
+                </div>
+                <div id="answerOptions" class="space-y-4"></div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-between items-center">
+                <button id="prevBtn" class="btn btn-secondary py-3 px-6 font-bold disabled:opacity-50">
+                    ← Trước
+                </button>
+                <div id="questionNumbers" class="flex flex-wrap gap-3 justify-center"></div>
+                <button id="nextBtn" class="btn btn-primary py-3 px-6 font-bold">
+                    Tiếp →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="resultsScreen" class="container mx-auto px-4 py-8 hidden">
+        <div class="max-w-2xl mx-auto result-card p-8 text-center">
+            <div class="mb-8">
+                <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600 mb-6">🎉 Hoàn Thành Bài Thi!</h1>
+                <div class="text-6xl mb-6" id="scoreIcon">🎉</div>
+                <div class="score-display mb-4" id="finalScore">Điểm: 0/40</div>
+                <div class="percentage-display mb-8" id="percentage">0%</div>
+            </div>
+            <div id="resultMessage" class="text-lg mb-8 p-6 rounded-2xl"></div>
+            <div class="space-y-4">
+                <div class="flex flex-wrap gap-4 justify-center">
+                    <button id="reviewBtn" class="btn btn-primary py-3 px-6 font-bold">
+                        🔍 Xem Lại Đáp Án
+                    </button>
+                    <button id="printResultBtn" class="btn btn-print py-3 px-6 font-bold">
+                        🖨️ In Kết Quả
+                    </button>
+                    <button id="printAnswerKeyBtn" class="btn btn-print py-3 px-6 font-bold">
+                        🗝 In Đáp Án
+                    </button>
+                </div>
+                <button id="restartBtn" class="btn btn-success py-3 px-8 font-bold mx-auto block">
+                    🔄 Thi Lại
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Screen -->
+    <div id="reviewScreen" class="container mx-auto px-4 py-8 hidden">
+        <div class="max-w-4xl mx-auto">
+            <div class="quiz-card p-6 mb-6">
+                <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 mb-6">📝 Xem Lại Câu Trả Lời</h2>
+                <button id="backToResultsBtn" class="btn btn-secondary py-2 px-4 font-bold mb-4">
+                    ← Về Kết Quả
+                </button>
+            </div>
+            <div id="reviewContent" class="space-y-6"></div>
+        </div>
+    </div>
+
+    <!-- Print Modals -->
+    <div id="printModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="quiz-card p-8 max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-blue-600">🖨️ Tùy Chọn In Ấn</h3>
+                <button id="closePrintModal" class="text-gray-500 hover:text-gray-700 text-3xl">&times;</button>
+            </div>
+            <div class="space-y-4">
+                <div class="print-option-card p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 cursor-pointer transition-all" data-print-type="quiz">
+                    <h4 class="font-bold text-lg text-blue-600 mb-2">📋 In Đề Thi</h4>
+                    <p class="text-gray-600">In toàn bộ câu hỏi để làm bài trên giấy</p>
+                    <ul class="text-sm text-gray-500 mt-2">
+                        <li>• Bao gồm tất cả 40 câu hỏi</li>
+                        <li>• Ô trống cho đánh dấu đáp án</li>
+                        <li>• Định dạng chuẩn giáo dục</li>
+                    </ul>
+                </div>
+                <div class="print-option-card p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 cursor-pointer transition-all" data-print-type="result">
+                    <h4 class="font-bold text-lg text-green-600 mb-2">📈 In Kết Quả Thi</h4>
+                    <p class="text-gray-600">In phiếu điểm chi tiết và thống kê</p>
+                    <ul class="text-sm text-gray-500 mt-2">
+                        <li>• Điểm số và phần trăm</li>
+                        <li>• Thời gian làm bài</li>
+                        <li>• Phân tích từng câu</li>
+                    </ul>
+                </div>
+                <div class="print-option-card p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 cursor-pointer transition-all" data-print-type="answerkey">
+                    <h4 class="font-bold text-lg text-purple-600 mb-2">🗝 In Đáp Án Chuẩn</h4>
+                    <p class="text-gray-600">In đáp án đầy đủ cho giáo viên</p>
+                    <ul class="text-sm text-gray-500 mt-2">
+                        <li>• Đáp án đúng cho tất cả câu</li>
+                        <li>• Giải thích chi tiết</li>
+                        <li>• Bảng tra cứu nhanh</li>
+                    </ul>
+                </div>
+                <div class="print-option-card p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 cursor-pointer transition-all" data-print-type="report">
+                    <h4 class="font-bold text-lg text-orange-600 mb-2">📉 In Báo Cáo Thống Kê</h4>
+                    <p class="text-gray-600">Báo cáo chi tiết về kết quả thi</p>
+                    <ul class="text-sm text-gray-500 mt-2">
+                        <li>• Thống kê từng chương</li>
+                        <li>• Phân tích điểm mạnh/yếu</li>
+                        <li>• Gợi ý ôn tập</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Preview Area (Hidden) -->
+    <div id="printArea" class="hidden"></div>
+
+    <!-- Cancel Confirmation Modal -->
+    <div id="cancelModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="quiz-card p-8 max-w-md mx-4">
+            <div class="text-center">
+                <div class="text-6xl mb-4">⚠️</div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Xác Nhận Hủy Bài Thi</h3>
+                <p class="text-gray-600 mb-6">
+                    Bạn có chắc chắn muốn hủy bài thi không?<br>
+                    <strong class="text-red-600">Tất cả câu trả lời sẽ bị mất!</strong>
+                </p>
+                <div class="flex space-x-4 justify-center">
+                    <button id="confirmCancelBtn" class="btn btn-secondary py-3 px-6 font-bold">
+                        ❌ Hủy Bài Thi
+                    </button>
+                    <button id="keepQuizBtn" class="btn btn-primary py-3 px-6 font-bold">
+                        ⬅️ Tiếp Tục
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
