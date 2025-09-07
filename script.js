@@ -62,6 +62,9 @@ class QuizApp {
         this.resultMessageElement = document.getElementById('resultMessage');
         this.scoreIconElement = document.getElementById('scoreIcon');
         this.reviewContentElement = document.getElementById('reviewContent');
+        
+        // Back to top button
+        this.backToTopBtn = document.getElementById('backToTopBtn');
     }
 
     attachEventListeners() {
@@ -167,6 +170,9 @@ class QuizApp {
         
         // Mobile floating navigation
         this.setupMobileNavigation();
+        
+        // Back to top button functionality
+        this.setupBackToTopButton();
 
         // Prevent page refresh during quiz
         window.addEventListener('beforeunload', (e) => {
@@ -404,6 +410,12 @@ class QuizApp {
         // Display score in new format
         this.finalScoreElement.textContent = `Điểm: ${this.score.toFixed(2)}/10.00`;
         this.percentageElement.textContent = `${this.percentage}%`;
+        
+        // Remove any existing score breakdown to prevent duplication
+        const existingBreakdown = document.querySelector('.score-breakdown');
+        if (existingBreakdown) {
+            existingBreakdown.remove();
+        }
         
         // Add detailed score breakdown
         const scoreBreakdown = document.createElement('div');
@@ -1458,4 +1470,57 @@ QuizApp.prototype.showMobileInstructions = function() {
             localStorage.setItem('mobileInstructionsShown', 'true');
         }
     }, 12000);
+};
+
+// Back to Top Button Functionality
+QuizApp.prototype.setupBackToTopButton = function() {
+    if (!this.backToTopBtn) return;
+    
+    // Click event to scroll to top
+    this.backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+        
+        // Show temporary message
+        this.showTemporaryMessage('↑ Đã về đầu trang', 'success');
+    });
+    
+    // Show/hide button based on scroll position
+    let scrollTimer = null;
+    
+    window.addEventListener('scroll', () => {
+        // Clear existing timer
+        if (scrollTimer) {
+            clearTimeout(scrollTimer);
+        }
+        
+        // Throttle scroll events for better performance
+        scrollTimer = setTimeout(() => {
+            this.handleBackToTopVisibility();
+        }, 100);
+    });
+    
+    // Initial check
+    this.handleBackToTopVisibility();
+};
+
+QuizApp.prototype.handleBackToTopVisibility = function() {
+    if (!this.backToTopBtn) return;
+    
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+    
+    // Show button when user has scrolled down more than 300px
+    // or when they are near the bottom of the page
+    const showThreshold = 300;
+    const nearBottom = scrollTop + windowHeight >= documentHeight - 100;
+    
+    if (scrollTop > showThreshold || nearBottom) {
+        this.backToTopBtn.classList.add('show');
+    } else {
+        this.backToTopBtn.classList.remove('show');
+    }
 };
