@@ -205,7 +205,7 @@ Mọi đóng góp để cải thiện ứng dụng đều được chào đón:
 
 **Tác giả**: Nguyễn Huy Điền  
 **Dự án**: Ứng Dụng Thi Trắc Nghiệm Python  
-**Năm phát triển**: 2024
+**Năm phát triển**: 2025
 
 ---
 
