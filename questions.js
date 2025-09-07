@@ -1,606 +1,1552 @@
-// Sample Python quiz questions - Replace with your 100+ questions from Word file
+// Python quiz questions - 129 câu hỏi
 const questionBank = [
     {
         id: 1,
-        question: "Python được tạo ra bởi ai?",
+        question: "Chương trình dịch (compiler/interpreter) có vai trò chính nào sau đây?",
         options: [
-            "A. Guido van Rossum",
-            "B. Dennis Ritchie", 
-            "C. Bjarne Stroustrup",
-            "D. James Gosling"
+            "A. Chạy mã máy trực tiếp mà không cần dịch.",
+            "B. Chuyển mã nguồn bậc cao thành mã máy và kiểm tra lỗi.",
+            "C. Chỉ dùng để viết code mà không thực thi.",
+            "D. Tạo giao diện người dùng cho IDE."
         ],
-        correct: 0,
-        explanation: "Python được tạo ra bởi Guido van Rossum vào năm 1991."
+        correct: 1,
+        explanation: "Chương trình dịch chuyển đổi mã nguồn thành mã máy, kiểm tra lỗi cú pháp/ngữ nghĩa, và tối ưu hóa code."
     },
     {
         id: 2,
-        question: "Kết quả của biểu thức 2 ** 3 trong Python là gì?",
+        question: "Sự khác biệt chính giữa biên dịch và thông dịch là gì?",
         options: [
-            "A. 6",
-            "B. 8",
-            "C. 23",
-            "D. 9"
+            "A. Biên dịch chạy từng dòng, thông dịch biên toàn bộ code trước.",
+            "B. Biên dịch biên toàn bộ code trước khi chạy, thông dịch chạy từng dòng tại runtime.",
+            "C. Cả hai đều giống nhau về tốc độ thực thi.",
+            "D. Thông dịch chỉ dùng cho ngôn ngữ bậc thấp."
         ],
         correct: 1,
-        explanation: "Toán tử ** trong Python là phép lũy thừa. 2 ** 3 = 2³ = 8"
+        explanation: "Biên dịch (như C++) tạo file thực thi trước, thông dịch (như Python) dịch và chạy từng dòng, dễ debug hơn nhưng chậm hơn."
     },
     {
         id: 3,
-        question: "Kiểu dữ liệu nào được sử dụng để lưu trữ text trong Python?",
+        question: "Tại sao Python được gọi là ngôn ngữ lập trình bậc cao?",
+        options: [
+            "A. Vì nó gần với ngôn ngữ máy.",
+            "B. Vì cú pháp trừu tượng, gần ngôn ngữ tự nhiên, không cần quản lý bộ nhớ thủ công.",
+            "C. Vì chỉ dùng cho lập trình web.",
+            "D. Vì phải biên dịch trước khi chạy."
+        ],
+        correct: 1,
+        explanation: "Ngôn ngữ bậc cao trừu tượng hóa chi tiết phần cứng, giúp lập trình viên tập trung vào logic."
+    },
+    {
+        id: 4,
+        question: "IDE nào sau đây KHÔNG phải là lựa chọn phổ biến cho Python?",
+        options: [
+            "A. PyCharm.",
+            "B. VS Code.",
+            "C. Eclipse (thường dùng cho Java).",
+            "D. Jupyter Notebook."
+        ],
+        correct: 2,
+        explanation: "Eclipse có thể dùng cho Python nhưng không phổ biến bằng PyCharm, VS Code, Spyder hay Jupyter."
+    },
+    {
+        id: 5,
+        question: "Python có thể dùng để phát triển những ứng dụng nào?",
+        options: [
+            "A. Chỉ web development.",
+            "B. Web, data science, automation, game, và desktop apps.",
+            "C. Chỉ khoa học dữ liệu.",
+            "D. Không dùng cho machine learning."
+        ],
+        correct: 1,
+        explanation: "Python đa năng, ví dụ: Django cho web, TensorFlow cho ML, Pygame cho game."
+    },
+    {
+        id: 6,
+        question: "Phương thức thực thi mã Python KHÔNG bao gồm?",
+        options: [
+            "A. Qua interpreter trong terminal.",
+            "B. Interactive mode (shell).",
+            "C. Biên dịch thành file .exe bằng PyInstaller.",
+            "D. Chạy trực tiếp mà không cần interpreter."
+        ],
+        correct: 3,
+        explanation: "Python luôn cần interpreter để chạy, dù trực tiếp hay qua IDE."
+    },
+    {
+        id: 7,
+        question: "Tập tin mã Python thường có phần mở rộng nào?",
+        options: [
+            "A. .exe.",
+            "B. .py.",
+            "C. .html.",
+            "D. .java."
+        ],
+        correct: 1,
+        explanation: "Phần mở rộng mặc định là .py cho script, .ipynb cho notebook."
+    },
+    {
+        id: 8,
+        question: "PyPi (Python Package Index) có vai trò gì?",
+        options: [
+            "A. Là IDE cho Python.",
+            "B. Kho lưu trữ thư viện Python để tải và cài đặt.",
+            "C. Công cụ biên dịch code.",
+            "D. Quản lý bộ nhớ runtime."
+        ],
+        correct: 1,
+        explanation: "PyPi là nơi lưu trữ gói như NumPy, cài qua pip."
+    },
+    {
+        id: 9,
+        question: "Pip dùng để làm gì trong Python?",
+        options: [
+            "A. Thực thi code.",
+            "B. Quản lý gói: cài, gỡ, cập nhật thư viện.",
+            "C. Tạo virtual environment.",
+            "D. Chỉ dùng cho web development."
+        ],
+        correct: 1,
+        explanation: "Pip là package manager, ví dụ: pip install numpy."
+    },
+    {
+        id: 10,
+        question: "NumPy là thư viện dùng cho mục đích gì chính?",
+        options: [
+            "A. Xử lý mảng đa chiều và tính toán khoa học.",
+            "B. Phát triển web.",
+            "C. Tạo game.",
+            "D. Quản lý file hệ thống."
+        ],
+        correct: 0,
+        explanation: "NumPy hỗ trợ ndarray, vectorized operations cho data science/ML."
+    },
+    {
+        id: 11,
+        question: "Sự khác biệt giữa module và package trong Python là?",
+        options: [
+            "A. Module là thư mục, package là file .py.",
+            "B. Module là file .py đơn lẻ, package là tập hợp module trong thư mục với __init__.py.",
+            "C. Cả hai đều giống nhau.",
+            "D. Package chỉ dùng cho thư viện bên thứ ba."
+        ],
+        correct: 1,
+        explanation: "Module: import math; Package: import numpy (chứa nhiều module)."
+    },
+    {
+        id: 12,
+        question: "Lệnh 'sudo apt-get install idle' dùng để?",
+        options: [
+            "A. Cài pip.",
+            "B. Cài IDLE - IDE mặc định của Python trên Linux.",
+            "C. Cài NumPy.",
+            "D. Chạy code Python."
+        ],
+        correct: 1,
+        explanation: "Lệnh này cài IDLE trên hệ thống Debian-based."
+    },
+    {
+        id: 13,
+        question: "Lệnh 'pip install spyder' dùng để?",
+        options: [
+            "A. Cài IDE Spyder cho Python.",
+            "B. Cài module math.",
+            "C. Kiểm tra phiên bản Python.",
+            "D. Tạo virtual environment."
+        ],
+        correct: 0,
+        explanation: "Spyder là IDE phù hợp cho khoa học dữ liệu."
+    },
+    {
+        id: 14,
+        question: "Để kiểm tra phiên bản Python, dùng lệnh nào?",
+        options: [
+            "A. python --version.",
+            "B. pip list.",
+            "C. import os.",
+            "D. sudo apt-get update."
+        ],
+        correct: 0,
+        explanation: "Chạy trong terminal để xem phiên bản."
+    },
+    {
+        id: 15,
+        question: "Cú pháp import module trong Python là?",
+        options: [
+            "A. from module import *.",
+            "B. import module (cơ bản).",
+            "C. use module.",
+            "D. require module."
+        ],
+        correct: 1,
+        explanation: "Ví dụ: import math; math.sqrt(4)."
+    },
+    {
+        id: 16,
+        question: "Để dùng hàm sqrt(), pow(), exp(), import module nào?",
+        options: [
+            "A. random.",
+            "B. os.",
+            "C. math.",
+            "D. datetime."
+        ],
+        correct: 2,
+        explanation: "math cung cấp hàm toán học cơ bản."
+    },
+    {
+        id: 17,
+        question: "Hàm random(), gauss(), randrange() thuộc module nào?",
+        options: [
+            "A. math.",
+            "B. random.",
+            "C. numpy.",
+            "D. sys."
+        ],
+        correct: 1,
+        explanation: "random dùng cho ngẫu nhiên."
+    },
+    {
+        id: 18,
+        question: "Module os dùng để?",
+        options: [
+            "A. Tính toán toán học.",
+            "B. Tương tác với hệ điều hành: file, thư mục, môi trường.",
+            "C. Xử lý thời gian.",
+            "D. Tạo GUI."
+        ],
+        correct: 1,
+        explanation: "Ví dụ: os.getcwd() lấy thư mục hiện tại."
+    },
+    {
+        id: 19,
+        question: "Module xử lý thời gian và ngày tháng là?",
+        options: [
+            "A. time.",
+            "B. datetime.",
+            "C. calendar.",
+            "D. os."
+        ],
+        correct: 1,
+        explanation: "datetime.now() lấy thời gian hiện tại."
+    },
+    {
+        id: 20,
+        question: "Python theo giấy phép nào, và tổ chức phê duyệt?",
+        options: [
+            "A. GPL, do GNU.",
+            "B. PSFL, do Python Software Foundation (PSF).",
+            "C. MIT, do MIT.",
+            "D. Apache, do Apache Foundation."
+        ],
+        correct: 1,
+        explanation: "PSFL là giấy phép nguồn mở, khuyến khích chia sẻ và phát triển cộng đồng."
+    },
+    {
+        id: 21,
+        question: "Kết quả của đoạn mã sau là gì? x = y = z = 'Orange'; print(x)",
+        options: [
+            "A. Orange",
+            "B. Error",
+            "C. x",
+            "D. ''"
+        ],
+        correct: 0,
+        explanation: "Tất cả biến x, y, z đều được gán giá trị 'Orange'."
+    },
+    {
+        id: 22,
+        question: "Làm thế nào để thay đổi giá trị của một biến trong Python?",
+        options: [
+            "A. Sử dụng toán tử ==",
+            "B. Gán giá trị mới bằng toán tử =",
+            "C. Sử dụng hàm change()",
+            "D. Không thể thay đổi"
+        ],
+        correct: 1,
+        explanation: "Python cho phép gán lại giá trị cho biến bất kỳ lúc nào."
+    },
+    {
+        id: 23,
+        question: "Ví dụ về cách nhập giá trị từ bàn phím trong Python là gì?",
+        options: [
+            "A. input('Nhập giá trị: ')",
+            "B. print('Nhập giá trị')",
+            "C. read()",
+            "D. scan()"
+        ],
+        correct: 0,
+        explanation: "Hàm input() dùng để nhận dữ liệu từ người dùng."
+    },
+    {
+        id: 24,
+        question: "Kết quả của đoạn mã sau là gì? w = 'wellcome to %s!'; n = 'tom'; print(w % (n))",
+        options: [
+            "A. Wellcome to Tom!",
+            "B. Wellcome to %s!",
+            "C. Error",
+            "D. Tom"
+        ],
+        correct: 0,
+        explanation: "Toán tử % dùng để định dạng chuỗi."
+    },
+    {
+        id: 25,
+        question: "Kết quả của đoạn mã sau là gì? quantity = 3; itemno = 567",
+        options: [
+            "A. Không in gì cả",
+            "B. quantity = 3, itemno = 567",
+            "C. Error",
+            "D. 3 567"
+        ],
+        correct: 0,
+        explanation: "Chỉ gán giá trị, không có lệnh print."
+    },
+    {
+        id: 26,
+        question: "Phương thức format() trong Python dùng để làm gì?",
+        options: [
+            "A. Định dạng chuỗi với placeholder {}",
+            "B. Chia chuỗi thành list",
+            "C. Chuyển đổi kiểu dữ liệu",
+            "D. In ra màn hình"
+        ],
+        correct: 0,
+        explanation: "Nó thay thế giá trị vào vị trí {}."
+    },
+    {
+        id: 27,
+        question: "Kết quả của phương thức split() trong đoạn mã sau là gì? s = 'Apple, Banana, Cherry'; print(s.split(','))",
+        options: [
+            "A. ['Apple', ' Banana', ' Cherry']",
+            "B. Apple, Banana, Cherry",
+            "C. Error",
+            "D. AppleBananaCherry"
+        ],
+        correct: 0,
+        explanation: "split() chia chuỗi thành list dựa trên dấu phân cách."
+    },
+    {
+        id: 28,
+        question: "Đoạn mã sử dụng format() để in 'I want 3 pieces of item 567 for 49.95 dollars.' là gì?",
+        options: [
+            "A. print('I want {} pieces of item {} for {} dollars.'.format(3, 567, 49.95))",
+            "B. print('I want 3 pieces of item 567 for 49.95 dollars.')",
+            "C. print(format(3, 567, 49.95))",
+            "D. print(3, 567, 49.95)"
+        ],
+        correct: 0,
+        explanation: "Sử dụng placeholder {} và format()."
+    },
+    {
+        id: 29,
+        question: "Làm thế nào để in ra chuỗi 'Hello World' trong Python?",
+        options: [
+            "A. print('Hello World')",
+            "B. echo 'Hello World'",
+            "C. printf('Hello World')",
+            "D. write('Hello World')"
+        ],
+        correct: 0,
+        explanation: "Hàm print() dùng để in ra màn hình."
+    },
+    {
+        id: 30,
+        question: "Tên biến không hợp lệ trong Python là gì?",
+        options: [
+            "A. my_var",
+            "B. 2var",
+            "C. _var",
+            "D. var2"
+        ],
+        correct: 1,
+        explanation: "Tên biến không được bắt đầu bằng số."
+    },
+    {
+        id: 31,
+        question: "Làm thế nào để tạo biến kiểu float với giá trị 2.8?",
+        options: [
+            "A. x = 2.8",
+            "B. x = float(2.8)",
+            "C. Cả A và B",
+            "D. x = int(2.8)"
+        ],
+        correct: 2,
+        explanation: "Python tự nhận kiểu hoặc dùng hàm float()."
+    },
+    {
+        id: 32,
+        question: "Vòng lặp for trong Python dùng để làm gì?",
+        options: [
+            "A. Lặp qua các phần tử trong danh sách",
+            "B. Kiểm tra điều kiện",
+            "C. Dừng chương trình",
+            "D. Gán giá trị"
+        ],
+        correct: 0,
+        explanation: "for dùng để duyệt iterable."
+    },
+    {
+        id: 33,
+        question: "Vòng lặp while trong Python hoạt động dựa trên gì?",
+        options: [
+            "A. Điều kiện (condition)",
+            "B. Số lần lặp cố định",
+            "C. Danh sách",
+            "D. Hàm"
+        ],
+        correct: 0,
+        explanation: "while lặp khi điều kiện còn True."
+    },
+    {
+        id: 34,
+        question: "Câu lệnh dùng để dừng vòng lặp trong Python là gì?",
+        options: [
+            "A. break",
+            "B. continue",
+            "C. pass",
+            "D. return"
+        ],
+        correct: 0,
+        explanation: "break thoát khỏi vòng lặp."
+    },
+    {
+        id: 35,
+        question: "Câu lệnh dùng để tiếp tục vòng lặp mới trong Python là gì?",
+        options: [
+            "A. continue",
+            "B. break",
+            "C. exit",
+            "D. stop"
+        ],
+        correct: 0,
+        explanation: "continue bỏ qua phần còn lại và bắt đầu lặp mới."
+    },
+    {
+        id: 36,
+        question: "Làm thế nào để chú thích một dòng trong Python?",
+        options: [
+            "A. # Chú thích",
+            "B. // Chú thích",
+            "C. /* Chú thích */",
+            "D. -- Chú thích"
+        ],
+        correct: 0,
+        explanation: "Sử dụng # cho chú thích một dòng."
+    },
+    {
+        id: 37,
+        question: "Ký hiệu dùng để chú thích trong Python là gì?",
+        options: [
+            "A. #",
+            "B. //",
+            "C. /* */",
+            "D. --"
+        ],
+        correct: 0,
+        explanation: "Python dùng # cho chú thích."
+    },
+    {
+        id: 38,
+        question: "Phát biểu SAI về Python là gì?",
+        options: [
+            "A. Python là ngôn ngữ biên dịch",
+            "B. Python là ngôn ngữ thông dịch",
+            "C. Python hỗ trợ OOP",
+            "D. Python có kiểu dữ liệu động"
+        ],
+        correct: 0,
+        explanation: "Python là ngôn ngữ thông dịch."
+    },
+    {
+        id: 39,
+        question: "Cách nối hai chuỗi trong Python là gì?",
+        options: [
+            "A. a + b",
+            "B. a - b",
+            "C. a * b",
+            "D. a / b"
+        ],
+        correct: 0,
+        explanation: "Toán tử + dùng để nối chuỗi."
+    },
+    {
+        id: 40,
+        question: "Để truy xuất ký tự ở vị trí 3 của chuỗi 'mycode', dùng gì?",
+        options: [
+            "A. 'mycode'[3]",
+            "B. 'mycode'(3)",
+            "C. get('mycode', 3)",
+            "D. charAt(3)"
+        ],
+        correct: 0,
+        explanation: "Index bắt đầu từ 0, vị trí 3 là 'o'."
+    },
+    {
+        id: 41,
+        question: "Làm thế nào để viết một hàm trong Python?",
+        options: [
+            "A. def ten_ham():",
+            "B. function ten_ham()",
+            "C. void ten_ham()",
+            "D. proc ten_ham"
+        ],
+        correct: 0,
+        explanation: "Sử dụng từ khóa def."
+    },
+    {
+        id: 42,
+        question: "Biến toàn cục trong Python là gì?",
+        options: [
+            "A. Biến khai báo ngoài hàm",
+            "B. Biến chỉ trong hàm",
+            "C. Biến kiểu static",
+            "D. Biến kiểu const"
+        ],
+        correct: 0,
+        explanation: "Global variable có phạm vi toàn chương trình."
+    },
+    {
+        id: 43,
+        question: "Cách tạo biến carname với giá trị 'Volvo' là gì?",
+        options: [
+            "A. carname = 'Volvo'",
+            "B. string carname = 'Volvo'",
+            "C. var carname = 'Volvo'",
+            "D. let carname = 'Volvo'"
+        ],
+        correct: 0,
+        explanation: "Gán trực tiếp."
+    },
+    {
+        id: 44,
+        question: "Kiểu của biến x khi x = 50 là gì?",
         options: [
             "A. int",
             "B. float",
             "C. str",
             "D. bool"
         ],
-        correct: 2,
-        explanation: "Kiểu dữ liệu str (string) được sử dụng để lưu trữ text trong Python."
-    },
-    {
-        id: 4,
-        question: "Cách nào đúng để tạo comment trong Python?",
-        options: [
-            "A. // This is a comment",
-            "B. /* This is a comment */",
-            "C. # This is a comment",
-            "D. <!-- This is a comment -->"
-        ],
-        correct: 2,
-        explanation: "Trong Python, comment được tạo bằng ký tự # ở đầu dòng."
-    },
-    {
-        id: 5,
-        question: "List trong Python có thể chứa các kiểu dữ liệu khác nhau không?",
-        options: [
-            "A. Không, chỉ chứa được một kiểu dữ liệu",
-            "B. Có, có thể chứa nhiều kiểu dữ liệu khác nhau",
-            "C. Chỉ chứa được số",
-            "D. Chỉ chứa được string"
-        ],
-        correct: 1,
-        explanation: "List trong Python có thể chứa nhiều kiểu dữ liệu khác nhau trong cùng một list."
-    },
-    {
-        id: 6,
-        question: "Phương thức nào dùng để thêm phần tử vào cuối list?",
-        options: [
-            "A. add()",
-            "B. append()",
-            "C. insert()",
-            "D. push()"
-        ],
-        correct: 1,
-        explanation: "Phương thức append() được sử dụng để thêm phần tử vào cuối list."
-    },
-    {
-        id: 7,
-        question: "Kết quả của len('Hello') là gì?",
-        options: [
-            "A. 4",
-            "B. 5",
-            "C. 6",
-            "D. Error"
-        ],
-        correct: 1,
-        explanation: "Hàm len() trả về độ dài của string. 'Hello' có 5 ký tự."
-    },
-    {
-        id: 8,
-        question: "Cách nào đúng để tạo dictionary trong Python?",
-        options: [
-            "A. dict = [key: value]",
-            "B. dict = {key: value}",
-            "C. dict = (key: value)",
-            "D. dict = <key: value>"
-        ],
-        correct: 1,
-        explanation: "Dictionary trong Python được tạo bằng cặp dấu ngoặc nhọn {} với cặp key: value."
-    },
-    {
-        id: 9,
-        question: "Từ khóa nào được sử dụng để định nghĩa hàm trong Python?",
-        options: [
-            "A. function",
-            "B. def",
-            "C. func",
-            "D. define"
-        ],
-        correct: 1,
-        explanation: "Từ khóa 'def' được sử dụng để định nghĩa hàm trong Python."
-    },
-    {
-        id: 10,
-        question: "Toán tử nào được sử dụng để kiểm tra xem một giá trị có trong list không?",
-        options: [
-            "A. is",
-            "B. in",
-            "C. has",
-            "D. contains"
-        ],
-        correct: 1,
-        explanation: "Toán tử 'in' được sử dụng để kiểm tra xem một giá trị có trong list hay không."
-    },
-    {
-        id: 11,
-        question: "Kết quả của 5 // 2 trong Python là gì?",
-        options: [
-            "A. 2.5",
-            "B. 2",
-            "C. 3",
-            "D. 2.0"
-        ],
-        correct: 1,
-        explanation: "Toán tử // là phép chia lấy phần nguyên. 5 // 2 = 2"
-    },
-    {
-        id: 12,
-        question: "Phương thức nào dùng để chuyển string thành chữ hoa?",
-        options: [
-            "A. uppercase()",
-            "B. upper()",
-            "C. toUpper()",
-            "D. capitalize()"
-        ],
-        correct: 1,
-        explanation: "Phương thức upper() được sử dụng để chuyển string thành chữ hoa."
-    },
-    {
-        id: 13,
-        question: "Cấu trúc lặp nào KHÔNG có trong Python?",
-        options: [
-            "A. for",
-            "B. while",
-            "C. do-while",
-            "D. for-each"
-        ],
-        correct: 2,
-        explanation: "Python không có cấu trúc lặp do-while như các ngôn ngữ khác."
-    },
-    {
-        id: 14,
-        question: "Cách nào đúng để import module math trong Python?",
-        options: [
-            "A. include math",
-            "B. import math",
-            "C. using math",
-            "D. require math"
-        ],
-        correct: 1,
-        explanation: "Từ khóa 'import' được sử dụng để import module trong Python."
-    },
-    {
-        id: 15,
-        question: "Kiểu dữ liệu nào trong Python là immutable?",
-        options: [
-            "A. list",
-            "B. dict",
-            "C. set",
-            "D. tuple"
-        ],
-        correct: 3,
-        explanation: "Tuple là kiểu dữ liệu immutable (không thể thay đổi) trong Python."
-    },
-    {
-        id: 16,
-        question: "Hàm nào được sử dụng để đọc input từ người dùng?",
-        options: [
-            "A. read()",
-            "B. input()",
-            "C. get()",
-            "D. scanf()"
-        ],
-        correct: 1,
-        explanation: "Hàm input() được sử dụng để đọc input từ người dùng trong Python."
-    },
-    {
-        id: 17,
-        question: "Kết quả của bool([]) là gì?",
-        options: [
-            "A. True",
-            "B. False",
-            "C. Error",
-            "D. None"
-        ],
-        correct: 1,
-        explanation: "List rỗng [] được coi là False khi chuyển đổi sang boolean."
-    },
-    {
-        id: 18,
-        question: "Cách nào đúng để tạo class trong Python?",
-        options: [
-            "A. class MyClass:",
-            "B. Class MyClass:",
-            "C. class MyClass()",
-            "D. class MyClass{}"
-        ],
         correct: 0,
-        explanation: "Từ khóa 'class' với tên class và dấu hai chấm được sử dụng để tạo class."
-    },
-    {
-        id: 19,
-        question: "Phương thức nào được gọi khi tạo đối tượng mới?",
-        options: [
-            "A. __init__()",
-            "B. __new__()",
-            "C. __create__()",
-            "D. __start__()"
-        ],
-        correct: 0,
-        explanation: "Phương thức __init__() được gọi khi khởi tạo đối tượng mới."
-    },
-    {
-        id: 20,
-        question: "Từ khóa nào được sử dụng để kế thừa class?",
-        options: [
-            "A. extends",
-            "B. inherits",
-            "C. Đặt tên class cha trong ngoặc đơn",
-            "D. implements"
-        ],
-        correct: 2,
-        explanation: "Trong Python, kế thừa được thực hiện bằng cách đặt tên class cha trong ngoặc đơn."
-    },
-    // Thêm các câu hỏi khác để đạt 100+ câu
-    {
-        id: 21,
-        question: "Exception nào được ném khi chia cho 0?",
-        options: [
-            "A. ValueError",
-            "B. ZeroDivisionError",
-            "C. ArithmeticError",
-            "D. TypeError"
-        ],
-        correct: 1,
-        explanation: "ZeroDivisionError được ném khi thực hiện phép chia cho 0."
-    },
-    {
-        id: 22,
-        question: "Từ khóa nào được sử dụng để bắt exception?",
-        options: [
-            "A. catch",
-            "B. except",
-            "C. handle",
-            "D. rescue"
-        ],
-        correct: 1,
-        explanation: "Từ khóa 'except' được sử dụng để bắt exception trong Python."
-    },
-    {
-        id: 23,
-        question: "Kết quả của range(5) là gì?",
-        options: [
-            "A. [1, 2, 3, 4, 5]",
-            "B. [0, 1, 2, 3, 4]",
-            "C. [0, 1, 2, 3, 4, 5]",
-            "D. range object"
-        ],
-        correct: 3,
-        explanation: "range(5) trả về một range object, không phải list. Nó tạo ra các số từ 0 đến 4."
-    },
-    {
-        id: 24,
-        question: "Cách nào đúng để mở file trong Python?",
-        options: [
-            "A. file = open('filename.txt', 'r')",
-            "B. file = File.open('filename.txt')",
-            "C. file = read('filename.txt')",
-            "D. file = load('filename.txt')"
-        ],
-        correct: 0,
-        explanation: "Hàm open() với tên file và mode được sử dụng để mở file trong Python."
-    },
-    {
-        id: 25,
-        question: "Lambda function trong Python là gì?",
-        options: [
-            "A. Hàm có tên",
-            "B. Hàm không tên (anonymous function)",
-            "C. Hàm đệ quy",
-            "D. Hàm built-in"
-        ],
-        correct: 1,
-        explanation: "Lambda function là hàm không tên (anonymous function) trong Python."
-    },
-    {
-        id: 26,
-        question: "Kết quả của [1, 2, 3] + [4, 5, 6] là gì?",
-        options: [
-            "A. [5, 7, 9]",
-            "B. [1, 2, 3, 4, 5, 6]",
-            "C. Error",
-            "D. 21"
-        ],
-        correct: 1,
-        explanation: "Phép cộng hai list sẽ nối chúng lại với nhau."
-    },
-    {
-        id: 27,
-        question: "Phương thức nào dùng để loại bỏ khoảng trắng ở đầu và cuối string?",
-        options: [
-            "A. trim()",
-            "B. strip()",
-            "C. clean()",
-            "D. remove()"
-        ],
-        correct: 1,
-        explanation: "Phương thức strip() được sử dụng để loại bỏ khoảng trắng ở đầu và cuối string."
-    },
-    {
-        id: 28,
-        question: "Set trong Python có thể chứa phần tử trùng lặp không?",
-        options: [
-            "A. Có",
-            "B. Không",
-            "C. Chỉ với số",
-            "D. Chỉ với string"
-        ],
-        correct: 1,
-        explanation: "Set trong Python không thể chứa các phần tử trùng lặp."
-    },
-    {
-        id: 29,
-        question: "Cách nào đúng để tạo generator trong Python?",
-        options: [
-            "A. Sử dụng yield",
-            "B. Sử dụng return",
-            "C. Sử dụng generate",
-            "D. Sử dụng create"
-        ],
-        correct: 0,
-        explanation: "Từ khóa 'yield' được sử dụng để tạo generator trong Python."
-    },
-    {
-        id: 30,
-        question: "Module nào được sử dụng để làm việc với regular expressions?",
-        options: [
-            "A. regex",
-            "B. re",
-            "C. regexp",
-            "D. pattern"
-        ],
-        correct: 1,
-        explanation: "Module 're' được sử dụng để làm việc với regular expressions trong Python."
-    },
-    {
-        id: 31,
-        question: "Decorator trong Python bắt đầu bằng ký tự gì?",
-        options: [
-            "A. #",
-            "B. @",
-            "C. $",
-            "D. &"
-        ],
-        correct: 1,
-        explanation: "Decorator trong Python bắt đầu bằng ký tự @."
-    },
-    {
-        id: 32,
-        question: "Từ khóa nào được sử dụng để tạo global variable trong function?",
-        options: [
-            "A. global",
-            "B. public",
-            "C. extern",
-            "D. static"
-        ],
-        correct: 0,
-        explanation: "Từ khóa 'global' được sử dụng để tạo global variable trong function."
-    },
-    {
-        id: 33,
-        question: "Kết quả của 'abc' * 3 là gì?",
-        options: [
-            "A. 'abcabcabc'",
-            "B. 'abc3'",
-            "C. Error",
-            "D. 'aabbcc'"
-        ],
-        correct: 0,
-        explanation: "Phép nhân string với số sẽ lặp lại string đó số lần tương ứng."
-    },
-    {
-        id: 34,
-        question: "List comprehension nào đúng để tạo list các số chẵn từ 0 đến 10?",
-        options: [
-            "A. [x for x in range(11) if x % 2 == 0]",
-            "B. [x for x in range(10) where x % 2 == 0]",
-            "C. [x if x % 2 == 0 for x in range(11)]",
-            "D. [x for x in range(11) when x % 2 == 0]"
-        ],
-        correct: 0,
-        explanation: "List comprehension đúng sử dụng if để lọc điều kiện."
-    },
-    {
-        id: 35,
-        question: "Từ khóa nào được sử dụng để import tất cả từ một module?",
-        options: [
-            "A. import module.*",
-            "B. from module import *",
-            "C. import * from module",
-            "D. include module.*"
-        ],
-        correct: 1,
-        explanation: "Cú pháp 'from module import *' được sử dụng để import tất cả từ module."
-    },
-    {
-        id: 36,
-        question: "Phương thức nào dùng để chuyển đổi string thành list?",
-        options: [
-            "A. split()",
-            "B. tolist()",
-            "C. convert()",
-            "D. parse()"
-        ],
-        correct: 0,
-        explanation: "Phương thức split() được sử dụng để chuyển string thành list."
-    },
-    {
-        id: 37,
-        question: "None trong Python tương đương với gì trong các ngôn ngữ khác?",
-        options: [
-            "A. null",
-            "B. undefined",
-            "C. empty",
-            "D. void"
-        ],
-        correct: 0,
-        explanation: "None trong Python tương đương với null trong các ngôn ngữ khác."
-    },
-    {
-        id: 38,
-        question: "Cách nào đúng để tạo virtual environment?",
-        options: [
-            "A. python -m venv myenv",
-            "B. python create venv myenv",
-            "C. python virtual myenv",
-            "D. python env myenv"
-        ],
-        correct: 0,
-        explanation: "Lệnh 'python -m venv myenv' được sử dụng để tạo virtual environment."
-    },
-    {
-        id: 39,
-        question: "Package manager mặc định của Python là gì?",
-        options: [
-            "A. npm",
-            "B. pip",
-            "C. yarn",
-            "D. conda"
-        ],
-        correct: 1,
-        explanation: "pip là package manager mặc định của Python."
-    },
-    {
-        id: 40,
-        question: "Từ khóa nào được sử dụng để thoát khỏi vòng lặp?",
-        options: [
-            "A. exit",
-            "B. break",
-            "C. stop",
-            "D. end"
-        ],
-        correct: 1,
-        explanation: "Từ khóa 'break' được sử dụng để thoát khỏi vòng lặp."
-    },
-    // Thêm 60 câu hỏi nữa để có đủ 100 câu
-    {
-        id: 41,
-        question: "Từ khóa nào để bỏ qua iteration hiện tại và chuyển sang iteration tiếp theo?",
-        options: [
-            "A. skip",
-            "B. continue",
-            "C. next",
-            "D. pass"
-        ],
-        correct: 1,
-        explanation: "Từ khóa 'continue' được sử dụng để bỏ qua iteration hiện tại."
-    },
-    {
-        id: 42,
-        question: "Kết quả của type([1, 2, 3]) là gì?",
-        options: [
-            "A. 'list'",
-            "B. <class 'list'>",
-            "C. list",
-            "D. array"
-        ],
-        correct: 1,
-        explanation: "Hàm type() trả về <class 'list'> cho list object."
-    },
-    {
-        id: 43,
-        question: "Cách nào đúng để format string trong Python 3.6+?",
-        options: [
-            "A. 'Hello %s' % name",
-            "B. 'Hello {}'.format(name)",
-            "C. f'Hello {name}'",
-            "D. Tất cả đều đúng"
-        ],
-        correct: 3,
-        explanation: "Tất cả các cách đều có thể sử dụng để format string trong Python."
-    },
-    {
-        id: 44,
-        question: "Method nào được gọi khi sử dụng str() trên object?",
-        options: [
-            "A. __str__()",
-            "B. __repr__()",
-            "C. __string__()",
-            "D. __format__()"
-        ],
-        correct: 0,
-        explanation: "Method __str__() được gọi khi sử dụng str() trên object."
+        explanation: "50 là số nguyên."
     },
     {
         id: 45,
-        question: "Cách nào để tạo shallow copy của list?",
+        question: "Kết quả của print(type(carname)) khi carname = 'Volvo' là gì?",
         options: [
-            "A. list.copy()",
-            "B. list[:]",
-            "C. list(original_list)",
-            "D. Tất cả đều đúng"
+            "A. <class 'str'>",
+            "B. <class 'int'>",
+            "C. str",
+            "D. Volvo"
         ],
-        correct: 3,
-        explanation: "Tất cả các cách đều tạo shallow copy của list."
+        correct: 0,
+        explanation: "type() trả về lớp của kiểu dữ liệu."
     },
     {
         id: 46,
-        question: "Module nào được sử dụng để làm việc với JSON?",
+        question: "Kết quả của print(x) khi x, y, z = 'Orange', 'Banana', 'Cherry' là gì?",
         options: [
-            "A. json",
-            "B. jsonlib",
-            "C. simplejson",
-            "D. jsonparser"
+            "A. Orange",
+            "B. Banana",
+            "C. Cherry",
+            "D. Error"
         ],
         correct: 0,
-        explanation: "Module 'json' built-in được sử dụng để làm việc với JSON."
+        explanation: "Gán nhiều biến cùng lúc."
     },
     {
         id: 47,
-        question: "Cách nào đúng để handle multiple exceptions?",
+        question: "Giá trị của i khi i, j = 10, 'Cherry' là gì?",
         options: [
-            "A. except (ValueError, TypeError):",
-            "B. except ValueError, TypeError:",
-            "C. except ValueError or TypeError:",
-            "D. except ValueError and TypeError:"
+            "A. 10",
+            "B. 'Cherry'",
+            "C. Error",
+            "D. None"
         ],
         correct: 0,
-        explanation: "Sử dụng tuple trong except để handle multiple exceptions."
+        explanation: "Gán theo thứ tự."
     },
     {
         id: 48,
-        question: "Từ khóa nào luôn được thực thi dù có exception hay không?",
+        question: "Kết quả của a + b khi a = 'Hello', b = 'World' là gì?",
         options: [
-            "A. finally",
-            "B. always",
-            "C. ensure",
-            "D. cleanup"
+            "A. HelloWorld",
+            "B. Hello World",
+            "C. Error",
+            "D. 0"
         ],
         correct: 0,
-        explanation: "Từ khóa 'finally' luôn được thực thi dù có exception hay không."
+        explanation: "Nối chuỗi không có khoảng trắng."
     },
     {
         id: 49,
-        question: "Kết quả của all([True, True, False]) là gì?",
+        question: "Kết quả của print(a, b) sau a = 5, b = 10, a, b = b, a là gì?",
         options: [
-            "A. True",
-            "B. False",
-            "C. [True, True, False]",
-            "D. Error"
+            "A. 10 5",
+            "B. 5 10",
+            "C. Error",
+            "D. 5 5"
         ],
-        correct: 1,
-        explanation: "Hàm all() trả về False nếu có ít nhất một phần tử là False."
+        correct: 0,
+        explanation: "Hoán đổi giá trị."
     },
     {
         id: 50,
-        question: "Kết quả của any([False, False, True]) là gì?",
+        question: "Cách biểu diễn số thực 0.0004567 trong Python là gì?",
+        options: [
+            "A. 4.567e-4",
+            "B. 0.0004567",
+            "C. Cả A và B",
+            "D. 4567e4"
+        ],
+        correct: 2,
+        explanation: "Ký tự khoa học hoặc trực tiếp."
+    },
+    {
+        id: 51,
+        question: "Kết quả của print(s.isnumeric()) khi s = '123' là gì?",
         options: [
             "A. True",
             "B. False",
-            "C. [False, False, True]",
+            "C. Error",
+            "D. 123"
+        ],
+        correct: 0,
+        explanation: "isnumeric() kiểm tra chuỗi có phải số."
+    },
+    {
+        id: 52,
+        question: "Kết quả của print(s.isnumeric()) khi s = '123a' là gì?",
+        options: [
+            "A. False",
+            "B. True",
+            "C. Error",
+            "D. 123a"
+        ],
+        correct: 0,
+        explanation: "Có ký tự không phải số."
+    },
+    {
+        id: 53,
+        question: "Kết quả của print(len(s)) khi s = 'University' là gì?",
+        options: [
+            "A. 10",
+            "B. 9",
+            "C. 11",
             "D. Error"
         ],
         correct: 0,
-        explanation: "Hàm any() trả về True nếu có ít nhất một phần tử là True."
+        explanation: "len() trả về độ dài chuỗi."
+    },
+    {
+        id: 54,
+        question: "Kiểu dữ liệu trả về từ hàm trunc() trong Python là gì?",
+        options: [
+            "A. int",
+            "B. float",
+            "C. str",
+            "D. bool"
+        ],
+        correct: 0,
+        explanation: "trunc() từ math module cắt phần thập phân."
+    },
+    {
+        id: 55,
+        question: "Hàm format() trả về kết quả kiểu gì?",
+        options: [
+            "A. str",
+            "B. int",
+            "C. list",
+            "D. tuple"
+        ],
+        correct: 0,
+        explanation: "Trả về chuỗi đã định dạng."
+    },
+    {
+        id: 56,
+        question: "Kết quả của print(x.imag) khi x = complex(3, 5) là gì?",
+        options: [
+            "A. 5.0",
+            "B. 3.0",
+            "C. 3 + 5j",
+            "D. Error"
+        ],
+        correct: 0,
+        explanation: "imag lấy phần ảo."
+    },
+    {
+        id: 57,
+        question: "Kết quả của print(x.real) khi x = complex(3, 5) là gì?",
+        options: [
+            "A. 3.0",
+            "B. 5.0",
+            "C. 3 + 5j",
+            "D. Error"
+        ],
+        correct: 0,
+        explanation: "real lấy phần thực."
+    },
+    {
+        id: 58,
+        question: "Kết quả của print(complex(x)) khi x = 1 là gì?",
+        options: [
+            "A. (1+0j)",
+            "B. 1j",
+            "C. 1",
+            "D. Error"
+        ],
+        correct: 0,
+        explanation: "complex() chuyển sang số phức."
+    },
+    {
+        id: 59,
+        question: "Ý nghĩa của print(x) khi x = 1j là gì?",
+        options: [
+            "A. Số phức với phần ảo là 1",
+            "B. Số thực 1",
+            "C. Chuỗi '1j'",
+            "D. Error"
+        ],
+        correct: 0,
+        explanation: "1j là số phức."
+    },
+    {
+        id: 60,
+        question: "Kết quả của print(bin(8)) là gì?",
+        options: [
+            "A. 0b1000",
+            "B. 8",
+            "C. 1000",
+            "D. Error"
+        ],
+        correct: 0,
+        explanation: "bin() chuyển sang nhị phân."
+    },
+    {
+        id: 61,
+        question: "Hàm int() trong Python dùng để làm gì?",
+        options: [
+            "A. Chuyển chuỗi thành số nguyên",
+            "B. In ra giá trị",
+            "C. Tạo danh sách",
+            "D. Kiểm tra kiểu dữ liệu"
+        ],
+        correct: 0,
+        explanation: "int() chuyển đổi giá trị sang kiểu integer."
+    },
+    {
+        id: 62,
+        question: "Làm thế nào để loại bỏ khoảng trắng ở đầu và cuối chuỗi trong Python?",
+        options: [
+            "A. Sử dụng phương thức strip()",
+            "B. Sử dụng phương thức replace()",
+            "C. Sử dụng hàm len()",
+            "D. Sử dụng toán tử +"
+        ],
+        correct: 0,
+        explanation: "strip() loại bỏ whitespace ở hai đầu chuỗi."
+    },
+    {
+        id: 63,
+        question: "Phương thức nào dùng để chuyển chuỗi thành chữ in hoa trong Python?",
+        options: [
+            "A. upper()",
+            "B. lower()",
+            "C. capitalize()",
+            "D. title()"
+        ],
+        correct: 0,
+        explanation: "upper() chuyển tất cả ký tự thành chữ hoa."
+    },
+    {
+        id: 64,
+        question: "Để thay thế một phần của chuỗi bằng chuỗi khác trong Python, dùng phương thức nào?",
+        options: [
+            "A. replace()",
+            "B. split()",
+            "C. join()",
+            "D. find()"
+        ],
+        correct: 0,
+        explanation: "replace(old, new) thay thế chuỗi con."
+    },
+    {
+        id: 65,
+        question: "Giá trị trả về mặc định của một hàm không có lệnh return trong Python là gì?",
+        options: [
+            "A. None",
+            "B. 0",
+            "C. True",
+            "D. Error"
+        ],
+        correct: 0,
+        explanation: "Hàm không return sẽ trả về None mặc định."
+    },
+    {
+        id: 66,
+        question: "Làm thế nào để định nghĩa một hàm trong Python?",
+        options: [
+            "A. Sử dụng từ khóa def",
+            "B. Sử dụng từ khóa function",
+            "C. Sử dụng từ khóa proc",
+            "D. Sử dụng từ khóa method"
+        ],
+        correct: 0,
+        explanation: "Cú pháp: def ten_ham():."
+    },
+    {
+        id: 67,
+        question: "Các thành phần chính trong tiêu đề của một hàm trong Python bao gồm gì?",
+        options: [
+            "A. Tên hàm và tham số",
+            "B. Chỉ tên hàm",
+            "C. Chỉ tham số",
+            "D. Giá trị trả về"
+        ],
+        correct: 0,
+        explanation: "Tiêu đề: def ten_ham(tham_so):."
+    },
+    {
+        id: 68,
+        question: "Hàm đệ quy (recursive function) trong Python là gì?",
+        options: [
+            "A. Hàm gọi chính nó",
+            "B. Hàm không có tham số",
+            "C. Hàm trả về None",
+            "D. Hàm toàn cục"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: hàm tính giai thừa gọi lại chính mình."
+    },
+    {
+        id: 69,
+        question: "Hàm id() trong Python dùng để làm gì?",
+        options: [
+            "A. Trả về địa chỉ bộ nhớ của đối tượng",
+            "B. Trả về độ dài",
+            "C. Chuyển đổi kiểu",
+            "D. In ra giá trị"
+        ],
+        correct: 0,
+        explanation: "id() trả về ID duy nhất của object."
+    },
+    {
+        id: 70,
+        question: "Kiểu lưu trữ tham số và biến cục bộ khi gọi hàm trong Python là gì?",
+        options: [
+            "A. Trên stack (ngăn xếp)",
+            "B. Trên heap",
+            "C. Trong module",
+            "D. Toàn cục"
+        ],
+        correct: 0,
+        explanation: "Tham số và biến cục bộ được lưu tạm thời trên stack."
+    },
+    {
+        id: 71,
+        question: "Để in ra giá trị của pi trong module toán học của Python, dùng gì?",
+        options: [
+            "A. import math; print(math.pi)",
+            "B. print(pi)",
+            "C. from pi import math",
+            "D. import pi"
+        ],
+        correct: 0,
+        explanation: "Phải import module math để truy cập pi."
+    },
+    {
+        id: 72,
+        question: "Toán tử nào dùng để nhập module từ gói trong Python?",
+        options: [
+            "A. from ... import ...",
+            "B. include",
+            "C. require",
+            "D. load"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: from math import pi."
+    },
+    {
+        id: 73,
+        question: "Sự khác biệt giữa biến toàn cục và biến cục bộ trong Python là gì?",
+        options: [
+            "A. Biến toàn cục có phạm vi toàn chương trình, biến cục bộ chỉ trong hàm",
+            "B. Biến cục bộ có phạm vi toàn chương trình",
+            "C. Cả hai đều giống nhau",
+            "D. Biến toàn cục không tồn tại"
+        ],
+        correct: 0,
+        explanation: "Global ngoài hàm, local trong hàm."
+    },
+    {
+        id: 74,
+        question: "Làm thế nào để khai báo hàm ẩn danh (lambda) trong Python?",
+        options: [
+            "A. lambda x: x + 1",
+            "B. def lambda(x): x + 1",
+            "C. function x: x + 1",
+            "D. anon x: x + 1"
+        ],
+        correct: 0,
+        explanation: "Lambda là hàm không tên, dùng cho biểu thức ngắn."
+    },
+    {
+        id: 75,
+        question: "Ví dụ về hàm với tham số mặc định trong Python là gì?",
+        options: [
+            "A. def ham(x=5): print(x)",
+            "B. def ham(x): print(x=5)",
+            "C. def ham(5=x): print(x)",
+            "D. def ham(): x=5"
+        ],
+        correct: 0,
+        explanation: "Tham số mặc định gán trong tiêu đề hàm."
+    },
+    {
+        id: 76,
+        question: "Kết quả của đoạn mã sau là gì? def sayHello(): print('Hello World!'); sayHello()",
+        options: [
+            "A. In ra 'Hello World!'",
+            "B. Không in gì",
+            "C. Error",
+            "D. None"
+        ],
+        correct: 0,
+        explanation: "Hàm được gọi và thực thi print."
+    },
+    {
+        id: 77,
+        question: "Kết quả của đoạn mã sau là gì? def f(x, y, z): return x + y + z; f(2, 30, 400)",
+        options: [
+            "A. 432",
+            "B. Error",
+            "C. None",
+            "D. 2 + 30 + 400"
+        ],
+        correct: 0,
+        explanation: "Hàm tính tổng và return, nhưng cần gọi print(f(2,30,400)) để in."
+    },
+    {
+        id: 78,
+        question: "Để sản sinh hai số và in ra kết quả lớn hơn trong Python, dùng gì?",
+        options: [
+            "A. def max(a, b): return a if a > b else b",
+            "B. def max(a, b): print(a + b)",
+            "C. def max(a, b): return a - b",
+            "D. def max(a, b): return None"
+        ],
+        correct: 0,
+        explanation: "So sánh và trả về số lớn hơn."
+    },
+    {
+        id: 79,
+        question: "Từ khóa global trong Python dùng để làm gì?",
+        options: [
+            "A. Truy cập và sửa biến toàn cục trong hàm",
+            "B. Tạo biến cục bộ",
+            "C. Xóa biến",
+            "D. In biến"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: global x; x = 10."
+    },
+    {
+        id: 80,
+        question: "Kết quả của đoạn mã sau là gì? def mult(a, b=1): return a * b; print(mult(10))",
+        options: [
+            "A. 10",
+            "B. 1",
+            "C. Error",
+            "D. 0"
+        ],
+        correct: 0,
+        explanation: "Tham số b mặc định là 1, nên 10 * 1 = 10."
+    },
+    {
+        id: 81,
+        question: "Giải thích khái niệm phương thức trong class Python và phân biệt nó với hàm.",
+        options: [
+            "A. Phương thức là hàm trong class, gắn với đối tượng; hàm là độc lập",
+            "B. Phương thức và hàm giống nhau hoàn toàn",
+            "C. Phương thức không cần self; hàm cần",
+            "D. Phương thức chỉ dùng cho biến toàn cục"
+        ],
+        correct: 0,
+        explanation: "Phương thức là hàm định nghĩa trong class, gọi qua đối tượng."
+    },
+    {
+        id: 82,
+        question: "Để truy vấn từ Python là gì? Hãy nêu ví dụ về class.",
+        options: [
+            "A. Sử dụng từ khóa class để định nghĩa",
+            "B. Sử dụng từ khóa def",
+            "C. Sử dụng từ khóa object",
+            "D. Sử dụng từ khóa init"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: class TenClass: pass."
+    },
+    {
+        id: 83,
+        question: "Trình bày vai trò của class trong Python và cách thực hiện khi tạo một đối tượng.",
+        options: [
+            "A. Class là blueprint cho đối tượng, tạo bằng TenClass()",
+            "B. Class là biến, tạo bằng def",
+            "C. Class là hàm, tạo bằng print",
+            "D. Class không tạo đối tượng"
+        ],
+        correct: 0,
+        explanation: "Class định nghĩa cấu trúc, đối tượng là instance của class."
+    },
+    {
+        id: 84,
+        question: "Hàm setattr() trong Python dùng để làm gì? Hãy cho ví dụ.",
+        options: [
+            "A. Gán giá trị cho attribute của đối tượng",
+            "B. Xóa attribute",
+            "C. Kiểm tra attribute tồn tại",
+            "D. Lấy giá trị attribute"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: setattr(obj, 'attr', value)."
+    },
+    {
+        id: 85,
+        question: "Hàm getattr() trong Python có chức năng gì? Hãy giải thích với một ví dụ.",
+        options: [
+            "A. Lấy giá trị của attribute từ đối tượng",
+            "B. Gán attribute",
+            "C. Xóa attribute",
+            "D. Kiểm tra type"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: getattr(obj, 'attr')."
+    },
+    {
+        id: 86,
+        question: "Thế nào là Operator Overloading trong Python? Cho một ví dụ minh họa.",
+        options: [
+            "A. Định nghĩa lại toán tử cho class tùy chỉnh",
+            "B. Thay đổi kiểu dữ liệu",
+            "C. Tạo hàm mới",
+            "D. Xóa toán tử"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: __add__ để overload +."
+    },
+    {
+        id: 87,
+        question: "Giải thích các loại phương thức lớp trong Python và phân biệt giữa phương thức instance và static.",
+        options: [
+            "A. Instance method dùng self; static không cần self hoặc cls",
+            "B. Tất cả đều dùng self",
+            "C. Static dùng cls; instance không",
+            "D. Không có sự khác biệt"
+        ],
+        correct: 0,
+        explanation: "@staticmethod không gắn với instance."
+    },
+    {
+        id: 88,
+        question: "Phương thức __del__ trong Python là gì? Nó được sử dụng trong trường hợp nào?",
+        options: [
+            "A. Destructor, gọi khi đối tượng bị xóa",
+            "B. Constructor",
+            "C. Getter",
+            "D. Setter"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: def __del__(self): print('Destroyed')."
+    },
+    {
+        id: 89,
+        question: "Hàm delattr() được sử dụng như thế nào trong Python? Cho ví dụ minh họa.",
+        options: [
+            "A. Xóa attribute của đối tượng",
+            "B. Gán attribute",
+            "C. Lấy attribute",
+            "D. Kiểm tra attribute"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: delattr(obj, 'attr')."
+    },
+    {
+        id: 90,
+        question: "Chức năng của hàm hasattr() trong Python là gì? Hãy nêu ví dụ sử dụng.",
+        options: [
+            "A. Kiểm tra attribute có tồn tại trong đối tượng",
+            "B. Xóa attribute",
+            "C. Gán attribute",
+            "D. In attribute"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: hasattr(obj, 'attr') trả về True/False."
+    },
+    {
+        id: 91,
+        question: "Cho đoạn mã sau, kết quả là gì?\nclass Test:\n    def __init__(self, a='Hello World'):\n        self.a = a\n    def display(self):\n        print(self.a)\nobj = Test()\nobj.display()",
+        options: [
+            "A. Hello World",
+            "B. Error",
+            "C. None",
+            "D. a"
+        ],
+        correct: 0,
+        explanation: "__init__ gán giá trị mặc định cho attribute a."
+    },
+    {
+        id: 92,
+        question: "Cho đoạn mã sau, kết quả là gì?\nclass Test:\n    def __init__(self, a):\n        self.a = a\n    def display(self):\n        print(self.a)\nobj = Test('Hello')\nobj.display()",
+        options: [
+            "A. Hello",
+            "B. Error",
+            "C. self.a",
+            "D. None"
+        ],
+        correct: 0,
+        explanation: "__init__ nhận tham số a và gán cho self.a."
+    },
+    {
+        id: 93,
+        question: "Đoạn mã sau chạy và giải thích lý do:\nobj = Test()\nobj.display()\n(Giả sử class Test có __init__ và display)",
+        options: [
+            "A. Chạy bình thường nếu class được định nghĩa",
+            "B. Luôn error vì thiếu tham số",
+            "C. In ra None",
+            "D. Không chạy"
+        ],
+        correct: 0,
+        explanation: "Tạo instance và gọi method."
+    },
+    {
+        id: 94,
+        question: "Điều gì xảy ra khi xóa một đối tượng trong Python bằng lệnh del? Hãy giải thích.",
+        options: [
+            "A. Gọi __del__ nếu có",
+            "B. Không gọi gì",
+            "C. Error",
+            "D. Tạo mới"
+        ],
+        correct: 0,
+        explanation: "Destructor được gọi khi del obj."
+    },
+    {
+        id: 95,
+        question: "Cho đoạn mã sau:\nclass Change:\n    def __init__(self, x, y, z):\n        self.a = x + y + z\nx = Change(1, 2, 3)\ny = getattr(x, 'a')\nsetattr(x, 'a', y + 1)\nprint(x.a)",
+        options: [
+            "A. 7",
+            "B. 6",
+            "C. Error",
+            "D. 1"
+        ],
+        correct: 0,
+        explanation: "Tính a=6, lấy y=6, set a=7, print 7."
+    },
+    {
+        id: 96,
+        question: "Giải thích cách thức hoạt động của phương thức __init__ trong class Python.",
+        options: [
+            "A. Constructor, gọi khi tạo instance",
+            "B. Destructor",
+            "C. Static method",
+            "D. Class method"
+        ],
+        correct: 0,
+        explanation: "__init__ khởi tạo attribute."
+    },
+    {
+        id: 97,
+        question: "Khi thực hiện đoạn mã sau:\nclass Demo:\n    def __init__(self):\n        pass\n    def test(self):\n        print(__name__)\nobj = Demo()\nobj.test()",
+        options: [
+            "A. In ra __main__",
+            "B. In ra Demo",
+            "C. Error",
+            "D. None"
+        ],
+        correct: 0,
+        explanation: "__name__ là tên module, thường là __main__ khi chạy trực tiếp."
+    },
+    {
+        id: 98,
+        question: "Giải thích cách sử dụng chuỗi tài liệu (docstring) trong Python và tác dụng của nó.",
+        options: [
+            "A. Chuỗi mô tả class/method, dùng cho documentation",
+            "B. Chuỗi để in ra",
+            "C. Chuỗi để gán attribute",
+            "D. Không có tác dụng"
+        ],
+        correct: 0,
+        explanation: "\"\"\"Docstring\"\"\" ngay sau def hoặc class."
+    },
+    {
+        id: 99,
+        question: "Hàm hasattr() trả về gì khi kiểm tra một thuộc tính không tồn tại? Cho ví dụ minh họa.",
+        options: [
+            "A. False",
+            "B. True",
+            "C. Error",
+            "D. None"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: hasattr(obj, 'non_exist') == False."
+    },
+    {
+        id: 100,
+        question: "Kết quả của đoạn mã sau là gì?\nls = [1, 2, 3, 4, 5, 6, 7]\nprint(ls[2:5])",
+        options: [
+            "A. [3, 4, 5]",
+            "B. [2, 3, 4]",
+            "C. [1, 2, 3]",
+            "D. Error"
+        ],
+        correct: 0,
+        explanation: "Slicing ls[start:end] lấy từ index 2 đến trước 5."
+    },
+    {
+        id: 101,
+        question: "Kết quả của print(ls[-1]) với ls = [1, 2, 3, 4, 5, 6, 7] là gì?",
+        options: [
+            "A. 7",
+            "B. 1",
+            "C. Error",
+            "D. [7]"
+        ],
+        correct: 0,
+        explanation: "Index âm -1 đề cập đến phần tử cuối cùng của list."
+    },
+    {
+        id: 102,
+        question: "Kết quả của đoạn mã sau là gì?\nls = [1, 2, 3, 4, 5, 6, 7]\nprint(ls[1:6:2])",
+        options: [
+            "A. [2, 4, 6]",
+            "B. [1, 3, 5]",
+            "C. [1, 2, 3]",
+            "D. Error"
+        ],
+        correct: 0,
+        explanation: "Slicing với step 2: lấy từ index 1 đến trước 6, cách 2 bước."
+    },
+    {
+        id: 103,
+        question: "Hàm append() trong Python dùng để làm gì?",
+        options: [
+            "A. Thêm phần tử vào cuối list",
+            "B. Xóa phần tử cuối list",
+            "C. Sắp xếp list",
+            "D. Kiểm tra độ dài"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: ls = [3, 5]; ls.append(5) → [3, 5, 5]."
+    },
+    {
+        id: 104,
+        question: "Kết quả của print(1 not in [1, 2, 3]) là gì?",
+        options: [
+            "A. False",
+            "B. True",
+            "C. Error",
+            "D. None"
+        ],
+        correct: 0,
+        explanation: "Toán tử not in kiểm tra sự không tồn tại; 1 tồn tại nên False."
+    },
+    {
+        id: 105,
+        question: "Dictionary trong Python nên sử dụng khi nào?",
+        options: [
+            "A. Khi cần lưu trữ dữ liệu theo cặp key-value",
+            "B. Khi cần danh sách có thứ tự",
+            "C. Khi cần tập hợp unique không thứ tự",
+            "D. Khi cần dữ liệu immutable"
+        ],
+        correct: 0,
+        explanation: "Dictionary phù hợp cho mapping, tra cứu nhanh qua key."
+    },
+    {
+        id: 106,
+        question: "Kết quả của print(ls[-5:-2]) với ls = [1, 2, 3, 4, 5, 6, 7] là gì?",
+        options: [
+            "A. [3, 4, 5]",
+            "B. [1, 2, 3]",
+            "C. [5, 6, 7]",
+            "D. Error"
+        ],
+        correct: 0,
+        explanation: "-5 là index 2, -2 là index 5; lấy từ 2 đến trước 5."
+    },
+    {
+        id: 107,
+        question: "Kết quả của print(ls[-5:5]) với ls = [1, 2, 3, 4, 5, 6, 7] là gì?",
+        options: [
+            "A. [3, 4, 5]",
+            "B. [3, 4, 5, 6]",
+            "C. [1, 2, 3]",
+            "D. Error"
+        ],
+        correct: 0,
+        explanation: "-5 là index 2, 5 là index 5; lấy từ 2 đến trước 5."
+    },
+    {
+        id: 108,
+        question: "Phân tích kết quả slicing ls[-5:5] với ls = [1, 2, 3, 4, 5, 6, 7].",
+        options: [
+            "A. Lấy từ index 2 đến trước 5",
+            "B. Lấy từ index -5 đến 5 (bao gồm)",
+            "C. Error vì index âm và dương",
+            "D. Toàn bộ list"
+        ],
+        correct: 0,
+        explanation: "Kết quả [3, 4, 5]; slicing linh hoạt với index âm."
+    },
+    {
+        id: 109,
+        question: "Tại sao set([[1,2],[3,4]]) không phải là cú pháp hợp lệ trong Python?",
+        options: [
+            "A. Set không chứa list (mutable)",
+            "B. Set chỉ chứa số",
+            "C. Cú pháp sai dấu ngoặc",
+            "D. Set không tồn tại"
+        ],
+        correct: 0,
+        explanation: "Set yêu cầu phần tử immutable như tuple hoặc số."
+    },
+    {
+        id: 110,
+        question: "Kết quả của print(ls[2:-2]) với ls = [1, 2, 3, 4, 5, 6, 7] là gì?",
+        options: [
+            "A. [3, 4, 5]",
+            "B. [2, 3, 4]",
+            "C. [1, 2, 3]",
+            "D. Error"
+        ],
+        correct: 0,
+        explanation: "Từ index 2 đến trước -2 (index 5)."
+    },
+    {
+        id: 111,
+        question: "Sự khác biệt giữa remove(), pop(), và discard() trong list/set Python là gì?",
+        options: [
+            "A. remove() xóa giá trị đầu tiên (error nếu không tồn tại), pop() xóa theo index, discard() xóa nếu tồn tại (không error)",
+            "B. Tất cả giống nhau",
+            "C. remove() cho list, pop() cho set",
+            "D. discard() xóa toàn bộ"
+        ],
+        correct: 0,
+        explanation: "Sử dụng tùy theo nhu cầu tránh error."
+    },
+    {
+        id: 112,
+        question: "Hàm len() dùng để làm gì với tuple trong Python?",
+        options: [
+            "A. Đếm số phần tử",
+            "B. Thêm phần tử",
+            "C. Xóa phần tử",
+            "D. Sắp xếp"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: t = (1, 2, 3); len(t) → 3."
+    },
+    {
+        id: 113,
+        question: "Làm thế nào để xóa một phần tử từ tuple trong Python?",
+        options: [
+            "A. Không thể trực tiếp, phải tạo tuple mới",
+            "B. Sử dụng remove()",
+            "C. Sử dụng del tuple[index]",
+            "D. Sử dụng pop()"
+        ],
+        correct: 0,
+        explanation: "Tuple immutable, ví dụ: t = t[:1] + t[2:] để xóa index 1."
+    },
+    {
+        id: 114,
+        question: "Kết quả của 'John' in d với d là dictionary là gì?",
+        options: [
+            "A. True nếu 'John' là key tồn tại",
+            "B. True nếu 'John' là value",
+            "C. Error",
+            "D. False luôn"
+        ],
+        correct: 0,
+        explanation: "Toán tử in kiểm tra key trong dict."
+    },
+    {
+        id: 115,
+        question: "Kết quả của unpacking sau là gì?\ncolors = ('Do', 'Luc', 'Lam', 'Hong', 'Vang')\n(x, *y, z) = colors\nprint(x, y, z)",
+        options: [
+            "A. Do ['Luc', 'Lam', 'Hong'] Vang",
+            "B. Error",
+            "C. Do Luc Lam",
+            "D. Vang ['Do', 'Luc'] Lam"
+        ],
+        correct: 0,
+        explanation: "*y thu thập các phần tử giữa."
+    },
+    {
+        id: 116,
+        question: "Trong Python, khi cố tạo tuple với hai phần tử giống nhau thì sao?",
+        options: [
+            "A. Cho phép, tuple có thể có duplicate",
+            "B. Error, không cho duplicate",
+            "C. Chuyển thành set",
+            "D. Chỉ lấy một"
+        ],
+        correct: 0,
+        explanation: "Tuple ordered và cho phép duplicate, ví dụ (1,1)."
+    },
+    {
+        id: 117,
+        question: "Giải thích unpacking trong đoạn mã sau:\ncolors = ('red', 'green', 'blue')\nx, y, z = colors\nprint(x, y, z)",
+        options: [
+            "A. Gán từng phần tử cho biến tương ứng",
+            "B. Error nếu số biến không khớp",
+            "C. In toàn bộ tuple",
+            "D. Chuyển thành list"
+        ],
+        correct: 0,
+        explanation: "Kết quả: red green blue."
+    },
+    {
+        id: 118,
+        question: "Khi thêm cặp key-value mới vào dictionary, hàm keys() thay đổi như thế nào?",
+        options: [
+            "A. Trả về view các key mới cập nhật",
+            "B. Không thay đổi",
+            "C. Error",
+            "D. Xóa key cũ"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: d['new'] = 1; d.keys() bao gồm 'new'."
+    },
+    {
+        id: 119,
+        question: "Giải thích cách định nghĩa một set trong Python và ý nghĩa của nó.",
+        options: [
+            "A. set = {1, 2, 3}, collection unique và unordered",
+            "B. set = [1, 2, 3], ordered",
+            "C. set = (1, 2, 3), immutable",
+            "D. set = {'a':1}, key-value"
+        ],
+        correct: 0,
+        explanation: "Set loại bỏ duplicate, không thứ tự, dùng cho membership check."
+    },
+    {
+        id: 120,
+        question: "Giải thích cách mở một tập tin để ghi trong Python, và lý do tại sao cần sử dụng with.",
+        options: [
+            "A. Sử dụng open('file.txt', 'w') với with để tự động đóng file",
+            "B. Sử dụng open('file.txt', 'r') mà không cần with",
+            "C. Sử dụng read('file.txt') với with",
+            "D. Sử dụng close('file.txt') để mở"
+        ],
+        correct: 0,
+        explanation: "With đảm bảo file được đóng sau khi sử dụng, tránh lỗi và rò rỉ tài nguyên."
+    },
+    {
+        id: 121,
+        question: "Nếu bạn muốn thêm dữ liệu vào một tập tin mà không ghi đè lên nội dung hiện có, bạn sẽ sử dụng chế độ nào?",
+        options: [
+            "A. 'a' (append)",
+            "B. 'w' (write)",
+            "C. 'r' (read)",
+            "D. 'x' (exclusive)"
+        ],
+        correct: 0,
+        explanation: "Chế độ 'a' thêm dữ liệu vào cuối file mà không xóa nội dung cũ."
+    },
+    {
+        id: 122,
+        question: "So sánh các phương thức read(), readline(), và readlines() trong Python để đọc nội dung của một tập tin.",
+        options: [
+            "A. read() đọc toàn bộ, readline() đọc một dòng, readlines() đọc thành list các dòng",
+            "B. Tất cả đều đọc toàn bộ file",
+            "C. read() đọc list, readline() đọc toàn bộ, readlines() đọc một dòng",
+            "D. Không có sự khác biệt"
+        ],
+        correct: 0,
+        explanation: "read() phù hợp file nhỏ, readline() cho lặp từng dòng, readlines() cho list toàn bộ."
+    },
+    {
+        id: 123,
+        question: "Giải thích cách sử dụng phương thức read() để đọc toàn bộ nội dung còn lại của tập tin.",
+        options: [
+            "A. Đọc toàn bộ file thành chuỗi duy nhất",
+            "B. Đọc chỉ một dòng",
+            "C. Đọc thành list",
+            "D. Đọc file nhị phân"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: with open('file.txt', 'r') as f: content = f.read()."
+    },
+    {
+        id: 124,
+        question: "Trong Python, làm thế nào để đọc dòng tiếp theo của một tập tin?",
+        options: [
+            "A. Sử dụng f.readline()",
+            "B. Sử dụng f.read()",
+            "C. Sử dụng f.readlines()",
+            "D. Sử dụng f.write()"
+        ],
+        correct: 0,
+        explanation: "Đọc một dòng tại một thời điểm, hữu ích cho file lớn."
+    },
+    {
+        id: 125,
+        question: "Làm thế nào để mở một tập tin trong Python để chỉ đọc?",
+        options: [
+            "A. open('file.txt', 'r')",
+            "B. open('file.txt', 'w')",
+            "C. open('file.txt', 'a')",
+            "D. open('file.txt', 'rb')"
+        ],
+        correct: 0,
+        explanation: "Chế độ 'r' chỉ đọc, tránh ghi đè."
+    },
+    {
+        id: 126,
+        question: "Giải thích cách đóng một tập tin sau khi thực hiện các thao tác đọc hoặc ghi.",
+        options: [
+            "A. Sử dụng f.close() hoặc with để tự động đóng",
+            "B. Không cần đóng, Python tự xử lý",
+            "C. Sử dụng del f",
+            "D. Sử dụng open() lại"
+        ],
+        correct: 0,
+        explanation: "Đóng file giải phóng tài nguyên."
+    },
+    {
+        id: 127,
+        question: "Trong Python, có thể mở và làm việc với tập tin nhị phân như thế nào?",
+        options: [
+            "A. Sử dụng chế độ 'rb' hoặc 'wb'",
+            "B. Sử dụng chế độ 'r' hoặc 'w'",
+            "C. Không hỗ trợ file nhị phân",
+            "D. Sử dụng chế độ 'a'"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: with open('image.bin', 'rb') as f: data = f.read()."
+    },
+    {
+        id: 128,
+        question: "Phương thức os.rename() dùng để làm gì trong Python?",
+        options: [
+            "A. Đổi tên file hoặc thư mục",
+            "B. Xóa file",
+            "C. Đọc file",
+            "D. Tạo file mới"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: import os; os.rename('old.txt', 'new.txt')."
+    },
+    {
+        id: 129,
+        question: "Làm thế nào để xóa một tập tin trong Python?",
+        options: [
+            "A. Sử dụng os.remove('file.txt')",
+            "B. Sử dụng os.delete('file.txt')",
+            "C. Sử dụng f.remove()",
+            "D. Sử dụng with open() và close()"
+        ],
+        correct: 0,
+        explanation: "Ví dụ: import os; os.remove('file.txt'); xóa vĩnh viễn."
     }
 ];
 
