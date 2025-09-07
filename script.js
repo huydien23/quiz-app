@@ -675,11 +675,11 @@ class QuizApp {
         }, 3000);
     }
 
-    // Print functionality methods
+    // Enhanced print functionality with better data validation
     showPrintModal() {
         // Check if quiz has started and has questions
         if (!this.questions || this.questions.length === 0) {
-            alert('⚠️ Vui lòng bắt đầu quiz trước khi in đề!');
+            this.showTemporaryMessage('⚠️ Vui lòng bắt đầu quiz trước khi in đề!', 'warning');
             return;
         }
         
@@ -688,61 +688,94 @@ class QuizApp {
     }
 
     hidePrintModal() {
+        if (!this.printModal) {
+            return;
+        }
+        
         this.printModal.classList.add('hidden');
         this.printModal.classList.remove('flex');
     }
 
     handlePrint(printType) {
-        // Validate data before printing
+        // Enhanced validation with user feedback
         if (!this.questions || this.questions.length === 0) {
-            alert('⚠️ Không có dữ liệu để in!');
+            this.showTemporaryMessage('⚠️ Không có dữ liệu để in! Vui lòng bắt đầu quiz trước.', 'error');
             this.hidePrintModal();
             return;
         }
         
+        // Show loading message
+        this.showTemporaryMessage('🖨️ Đang chuẩn bị tài liệu in...', 'info');
+        
         this.hidePrintModal();
         
-        switch(printType) {
-            case 'quiz':
-                this.printQuiz();
-                break;
-            case 'result':
-                this.printResult();
-                break;
-            case 'answerkey':
-                this.printAnswerKey();
-                break;
-            case 'report':
-                this.printReport();
-                break;
-        }
+        // Add slight delay to show loading message
+        setTimeout(() => {
+            switch(printType) {
+                case 'quiz':
+                    this.printQuiz();
+                    break;
+                case 'result':
+                    this.printResult();
+                    break;
+                case 'answerkey':
+                    this.printAnswerKey();
+                    break;
+                case 'report':
+                    this.printReport();
+                    break;
+                default:
+                    this.showTemporaryMessage('⚠️ Loại in không hợp lệ!', 'error');
+            }
+        }, 500);
     }
 
     printQuiz() {
         if (!this.questions || this.questions.length === 0) {
-            alert('⚠️ Vui lòng bắt đầu quiz trước khi in đề!');
+            this.showTemporaryMessage('⚠️ Vui lòng bắt đầu quiz trước khi in đề!', 'warning');
             return;
         }
-        const printContent = this.generateQuizPrintContent();
-        this.executePrint(printContent, 'Đề Thi Trắc Nghiệm Python');
+        
+        try {
+            const printContent = this.generateQuizPrintContent();
+            this.executePrint(printContent, 'Đề Thi Trắc Nghiệm Python');
+            this.showTemporaryMessage('✅ Đã gửi đề thi đến máy in!', 'success');
+        } catch (error) {
+            console.error('Print error:', error);
+            this.showTemporaryMessage('❌ Lỗi khi in đề thi!', 'error');
+        }
     }
 
     printResult() {
         if (!this.isQuizCompleted || !this.questions || this.questions.length === 0) {
-            alert('⚠️ Vui lòng hoàn thành quiz trước khi in kết quả!');
+            this.showTemporaryMessage('⚠️ Vui lòng hoàn thành quiz trước khi in kết quả!', 'warning');
             return;
         }
-        const printContent = this.generateResultPrintContent();
-        this.executePrint(printContent, 'Kết Quả Thi');
+        
+        try {
+            const printContent = this.generateResultPrintContent();
+            this.executePrint(printContent, 'Kết Quả Thi');
+            this.showTemporaryMessage('✅ Đã gửi kết quả thi đến máy in!', 'success');
+        } catch (error) {
+            console.error('Print error:', error);
+            this.showTemporaryMessage('❌ Lỗi khi in kết quả!', 'error');
+        }
     }
 
     printAnswerKey() {
         if (!this.questions || this.questions.length === 0) {
-            alert('⚠️ Vui lòng bắt đầu quiz trước khi in đáp án!');
+            this.showTemporaryMessage('⚠️ Vui lòng bắt đầu quiz trước khi in đáp án!', 'warning');
             return;
         }
-        const printContent = this.generateAnswerKeyPrintContent();
-        this.executePrint(printContent, 'Đáp Án Chuẩn');
+        
+        try {
+            const printContent = this.generateAnswerKeyPrintContent();
+            this.executePrint(printContent, 'Đáp Án Chuẩn');
+            this.showTemporaryMessage('✅ Đã gửi đáp án chuẩn đến máy in!', 'success');
+        } catch (error) {
+            console.error('Print error:', error);
+            this.showTemporaryMessage('❌ Lỗi khi in đáp án!', 'error');
+        }
     }
 
     printReport() {

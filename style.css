@@ -775,7 +775,7 @@ input[type="radio"]:checked::after {
     }
 }
 
-/* Print Styles */
+/* Enhanced Print Styles */
 @media print {
     .no-print {
         display: none !important;
@@ -783,10 +783,290 @@ input[type="radio"]:checked::after {
     
     body {
         background: white !important;
+        font-family: 'Times New Roman', serif;
+        font-size: 12pt;
+        line-height: 1.4;
+        color: black;
+        margin: 0;
+        padding: 15px;
     }
     
     .quiz-card {
         box-shadow: none !important;
-        border: 1px solid #ccc !important;
+        border: 1px solid #000 !important;
+        background: white !important;
+        page-break-inside: avoid;
+    }
+    
+    /* Print Content Styles */
+    .print-content {
+        width: 100%;
+        max-width: 210mm;
+        margin: 0 auto;
+    }
+    
+    .print-header {
+        text-align: center;
+        border-bottom: 3px solid #000;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .print-header h1 {
+        font-size: 18pt;
+        font-weight: bold;
+        margin: 0 0 10px 0;
+        color: #000;
+    }
+    
+    .exam-info {
+        font-size: 11pt;
+        margin-top: 10px;
+    }
+    
+    .exam-info p {
+        margin: 5px 0;
+    }
+    
+    .print-instructions {
+        margin: 20px 0;
+        border: 1px solid #000;
+        padding: 10px;
+    }
+    
+    .print-instructions h3 {
+        margin: 0 0 10px 0;
+        font-size: 13pt;
+    }
+    
+    .print-instructions ul {
+        margin: 5px 0;
+        padding-left: 20px;
+    }
+    
+    .print-instructions li {
+        margin: 3px 0;
+        font-size: 10pt;
+    }
+    
+    /* Question Styles */
+    .question-item {
+        margin-bottom: 25px;
+        page-break-inside: avoid;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 15px;
+    }
+    
+    .question-header {
+        font-weight: bold;
+        margin-bottom: 10px;
+        font-size: 11pt;
+    }
+    
+    .options {
+        margin-left: 20px;
+    }
+    
+    .option {
+        margin: 8px 0;
+        font-size: 10pt;
+        display: flex;
+        align-items: center;
+    }
+    
+    .option-box {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border: 2px solid #000;
+        margin-right: 8px;
+        flex-shrink: 0;
+    }
+    
+    /* Answer Sheet */
+    .answer-sheet {
+        margin-top: 30px;
+        border-top: 2px solid #000;
+        padding-top: 15px;
+        page-break-before: auto;
+    }
+    
+    .answer-sheet h3 {
+        text-align: center;
+        font-size: 14pt;
+        margin-bottom: 15px;
+    }
+    
+    .answer-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .answer-row {
+        display: flex;
+        align-items: center;
+        font-size: 10pt;
+        border: 1px solid #ccc;
+        padding: 4px;
+    }
+    
+    .q-num {
+        font-weight: bold;
+        margin-right: 8px;
+        min-width: 25px;
+    }
+    
+    .opt {
+        margin: 0 3px;
+        border: 1px solid #000;
+        padding: 2px 4px;
+        font-size: 9pt;
+    }
+    
+    /* Score and Results Print */
+    .score-summary {
+        border: 2px solid #000;
+        padding: 15px;
+        margin: 20px 0;
+    }
+    
+    .score-box h2 {
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 16pt;
+    }
+    
+    .score-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    
+    .score-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .score-item.final {
+        font-weight: bold;
+        border-bottom: 2px solid #000;
+    }
+    
+    /* Answer Key Print */
+    .answer-key-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .answer-key-item {
+        border: 1px solid #000;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .question-number {
+        font-weight: bold;
+        font-size: 12pt;
+        margin-bottom: 5px;
+    }
+    
+    .correct-answer {
+        background: #f0f0f0;
+        padding: 5px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    
+    .explanation {
+        font-size: 9pt;
+        font-style: italic;
+        color: #555;
+    }
+    
+    .quick-reference {
+        margin-top: 30px;
+        border-top: 2px solid #000;
+        padding-top: 15px;
+    }
+    
+    .quick-answers {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 5px;
+        font-size: 10pt;
+    }
+    
+    .quick-item {
+        text-align: center;
+        padding: 3px;
+        border: 1px solid #ccc;
+    }
+    
+    /* Chapter Analysis */
+    .chapter-analysis {
+        margin: 15px 0;
+    }
+    
+    .chapter-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px;
+        border-bottom: 1px solid #ddd;
+        font-size: 10pt;
+    }
+    
+    .chapter-name {
+        font-weight: bold;
+    }
+    
+    /* Statistics */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin: 15px 0;
+    }
+    
+    .stat-item {
+        text-align: center;
+        border: 1px solid #000;
+        padding: 10px;
+    }
+    
+    .stat-label {
+        font-size: 9pt;
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    .stat-value {
+        font-weight: bold;
+        font-size: 12pt;
+    }
+    
+    /* Recommendations */
+    .recommendations-list {
+        margin: 15px 0;
+        padding-left: 20px;
+    }
+    
+    .recommendations-list li {
+        margin: 8px 0;
+        font-size: 10pt;
+    }
+    
+    .excellent {
+        text-align: center;
+        font-weight: bold;
+        font-size: 14pt;
+        color: #000;
+        border: 2px solid #000;
+        padding: 15px;
     }
 }
