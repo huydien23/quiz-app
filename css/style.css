@@ -537,6 +537,33 @@ input[type="radio"]:checked::after {
     border-radius: 2px;
 }
 
+/* Enhanced Topic Card Styles */
+.topic-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.topic-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.topic-card:hover::before {
+    left: 100%;
+}
+
+.topic-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
 /* Enhanced Scrollbar */
 ::-webkit-scrollbar {
     width: 12px;

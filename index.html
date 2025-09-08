@@ -7,21 +7,165 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#1e40af">
-    <title>Ứng Dụng Thi Trắc Nghiệm Python v1.0</title>
+    <title>Hệ Thống Thi Trắc Nghiệm Đa Chủ Đề v2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body class="bg-gray-100 min-h-screen">
+    <!-- Login/Register Screen -->
+    <div id="authScreen" class="container mx-auto px-4 py-8">
+        <div class="max-w-md mx-auto quiz-card p-8">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">🔐</div>
+                <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800 mb-4">Đăng Nhập / Đăng Ký</h2>
+                <p class="text-gray-600 text-lg">Vui lòng đăng nhập để tiếp tục</p>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="loginForm">
+                <div class="space-y-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" id="loginEmail" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Nhập email của bạn">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Mật khẩu</label>
+                        <input type="password" id="loginPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Nhập mật khẩu">
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <button id="loginBtn" class="btn btn-primary w-full py-3 text-lg font-bold">
+                        🚀 Đăng Nhập
+                    </button>
+                    <button id="googleLoginBtn" class="btn btn-secondary w-full py-3 text-lg font-bold bg-red-500 hover:bg-red-600 text-white border-red-500">
+                        <svg class="w-5 h-5 inline mr-2" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Đăng Nhập Bằng Google
+                    </button>
+                    <button id="showRegisterBtn" class="btn btn-secondary w-full py-3 text-lg font-bold">
+                        🆕 Tạo Tài Khoản Mới
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Register Form -->
+            <div id="registerForm" class="hidden">
+                <div class="space-y-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Họ và tên</label>
+                        <input type="text" id="registerName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Nhập họ và tên">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" id="registerEmail" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Nhập email của bạn">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Mật khẩu</label>
+                        <input type="password" id="registerPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)">
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <button id="registerBtn" class="btn btn-success w-full py-3 text-lg font-bold">
+                        ✅ Đăng Ký
+                    </button>
+                    <button id="googleRegisterBtn" class="btn btn-secondary w-full py-3 text-lg font-bold bg-red-500 hover:bg-red-600 text-white border-red-500">
+                        <svg class="w-5 h-5 inline mr-2" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Đăng Ký Bằng Google
+                    </button>
+                    <button id="showLoginBtn" class="btn btn-secondary w-full py-3 text-lg font-bold">
+                        ← Quay Lại Đăng Nhập
+                    </button>
+                </div>
+            </div>
+            
+            <div id="authError" class="hidden mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg"></div>
+            <div id="authSuccess" class="hidden mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg"></div>
+        </div>
+    </div>
+
+    <!-- Topic Selection Screen -->
+    <div id="topicScreen" class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto quiz-card p-8 text-center">
+            <div class="mb-8">
+                <div class="text-6xl mb-4">📚</div>
+                <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800 mb-6">
+                    Hệ Thống Thi Trắc Nghiệm
+                    <span class="inline-block text-xs font-normal bg-blue-500 text-white px-2 py-1 rounded-full ml-2 align-middle">v2.0</span>
+                </h1>
+                <p class="text-gray-600 mb-8 text-lg">Chọn chủ đề bạn muốn kiểm tra kiến thức</p>
+                <div class="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-lg mb-8">
+                    <p class="text-blue-800 font-semibold flex items-center justify-center">
+                        <span class="mr-2">👨‍💻</span>
+                        <span>Được phát triển bởi: <strong>Nguyễn Huy Điền</strong></span>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Topic Cards -->
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <!-- Python Topic -->
+                <div class="topic-card p-6 rounded-xl border-2 border-blue-200 hover:border-blue-400 cursor-pointer transition-all bg-gradient-to-br from-blue-50 to-cyan-50" data-topic="python">
+                    <div class="text-5xl mb-4">🐍</div>
+                    <h3 class="text-2xl font-bold text-blue-800 mb-3">Lập Trình Python</h3>
+                    <p class="text-blue-700 mb-4">Kiểm tra kiến thức Python cơ bản đến nâng cao</p>
+                    <div class="text-sm text-blue-600 space-y-1">
+                        <div>• 129 câu hỏi trong ngân hàng</div>
+                        <div>• Cú pháp, OOP, Modules, Functions</div>
+                        <div>• Thời gian: 60 phút</div>
+                    </div>
+                </div>
+                
+                <!-- Open Source Development Topic -->
+                <div class="topic-card p-6 rounded-xl border-2 border-green-200 hover:border-green-400 cursor-pointer transition-all bg-gradient-to-br from-green-50 to-emerald-50" data-topic="opensource">
+                    <div class="text-5xl mb-4">🌟</div>
+                    <h3 class="text-2xl font-bold text-green-800 mb-3">Phát Triển Phần Mềm Nguồn Mở</h3>
+                    <p class="text-green-700 mb-4">Kiến thức về FOSS, Git, License, Community</p>
+                    <div class="text-sm text-green-600 space-y-1">
+                        <div>• 50 câu hỏi trong ngân hàng</div>
+                        <div>• Git, GitHub, License, Best Practices</div>
+                        <div>• Thời gian: 60 phút</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quiz-card p-6 bg-gradient-to-r from-blue-50 to-cyan-50">
+                <p class="text-blue-800 font-semibold mb-4"><strong>📋 Hướng dẫn chung:</strong></p>
+                <ul class="text-left text-blue-700 space-y-3">
+                    <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> 40 câu hỏi được chọn ngẫu nhiên từ ngân hàng câu hỏi</li>
+                    <li class="flex items-center"><span class="text-green-500 mr-2">⏱️</span> Thời gian làm bài: 60 phút</li>
+                    <li class="flex items-center"><span class="text-green-500 mr-2">🎯</span> Chọn đáp án đúng nhất cho mỗi câu hỏi</li>
+                    <li class="flex items-center"><span class="text-green-500 mr-2">🔄</span> Bạn có thể chuyển đổi giữa các câu hỏi</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <!-- Start Screen -->
-    <div id="startScreen" class="container mx-auto px-4 py-8">
+    <div id="startScreen" class="container mx-auto px-4 py-8 hidden">
         <div class="max-w-2xl mx-auto quiz-card p-8 text-center">
             <div class="mb-8">
-                <div class="text-6xl mb-4">🐍</div>
-                <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800 mb-6">
+                <div id="topicIcon" class="text-6xl mb-4">🐍</div>
+                <h1 id="topicTitle" class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800 mb-6">
                     Bài Thi Trắc Nghiệm Python
-                    <span class="inline-block text-xs font-normal bg-blue-500 text-white px-2 py-1 rounded-full ml-2 align-middle">v1.0</span>
+                    <span class="inline-block text-xs font-normal bg-blue-500 text-white px-2 py-1 rounded-full ml-2 align-middle">v2.0</span>
                 </h1>
-                <p class="text-gray-600 mb-4 text-lg">Kiểm tra kiến thức Python của bạn với 40 câu hỏi ngẫu nhiên</p>
+                <p id="topicDescription" class="text-gray-600 mb-4 text-lg">Kiểm tra kiến thức Python của bạn với 40 câu hỏi ngẫu nhiên</p>
                 <div class="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-lg mb-6">
                     <p class="text-blue-800 font-semibold flex items-center justify-center">
                         <span class="mr-2">👨‍💻</span>
@@ -38,9 +182,14 @@
                     <li class="flex items-center"><span class="text-green-500 mr-2">🔄</span> Bạn có thể chuyển đổi giữa các câu hỏi</li>
                 </ul>
             </div>
-            <button id="startBtn" class="btn btn-primary py-4 px-10 text-lg font-bold shadow-xl">
-                🚀 Bắt Đầu Thi
-            </button>
+            <div class="flex space-x-4 justify-center">
+                <button id="backToTopicsBtn" class="btn btn-secondary py-3 px-6 text-lg font-bold">
+                    ← Chọn Chủ Đề Khác
+                </button>
+                <button id="startBtn" class="btn btn-primary py-4 px-10 text-lg font-bold shadow-xl">
+                    🚀 Bắt Đầu Thi
+                </button>
+            </div>
         </div>
     </div>
 
@@ -52,6 +201,10 @@
                 <div class="flex items-center space-x-4">
                     <div class="bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-4 py-2 rounded-full font-semibold">
                         📋 Câu <span id="currentQuestion">1</span> / <span id="totalQuestions">40</span>
+                    </div>
+                    <div id="userInfo" class="text-sm text-blue-600">
+                        <span class="mr-2">👤</span>
+                        <span id="currentUserName">Người dùng</span>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -67,6 +220,9 @@
                     </button>
                     <button id="submitBtn" class="btn btn-success py-3 px-6 font-bold">
                         📋 Nộp Bài
+                    </button>
+                    <button id="logoutBtn" class="btn btn-secondary py-2 px-4 text-sm font-bold" title="Đăng xuất">
+                        😪 Thoát
                     </button>
                 </div>
             </div>
@@ -215,16 +371,64 @@
         </div>
     </div>
 
-    <script src="questions.js"></script>
-    <script src="script.js"></script>
+    <script src="js/questions.js"></script>
+    <script src="js/opensource-questions.js"></script>
+    
+    <!-- Firebase Configuration -->
+    <script>
+        // Initialize Firebase with actual project config
+        firebase.initializeApp({
+            apiKey: "AIzaSyC1dKZFJNm8IydXhf-zR3LQu_yCNuMde_w",
+            authDomain: "cloud-quiz-app-98ad4.firebaseapp.com",
+            databaseURL: "https://cloud-quiz-app-98ad4-default-rtdb.firebaseio.com",
+            projectId: "cloud-quiz-app-98ad4",
+            storageBucket: "cloud-quiz-app-98ad4.firebasestorage.app",
+            messagingSenderId: "538066297409",
+            appId: "1:538066297409:web:d59bfc83541f8e141b5cc0",
+            measurementId: "G-D5QR5ZZFWM"
+        });
+        
+        const auth = firebase.auth();
+        const database = firebase.database();
+    </script>
+    
+    <script src="js/script.js"></script>
+    <script src="js/dashboard.js"></script>
+    
+    <!-- Load Dashboard HTML -->
+    <script>
+        // Load dashboard HTML dynamically
+        fetch('pages/dashboard.html')
+            .then(response => response.text())
+            .then(html => {
+                const dashboardContainer = document.createElement('div');
+                dashboardContainer.innerHTML = html;
+                const dashboardScreen = dashboardContainer.querySelector('#dashboardScreen');
+                if (dashboardScreen) {
+                    // Insert before footer
+                    const footer = document.querySelector('footer');
+                    document.body.insertBefore(dashboardScreen, footer);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading dashboard:', error);
+                // Fallback: create basic dashboard
+                const dashboardScreen = document.createElement('div');
+                dashboardScreen.id = 'dashboardScreen';
+                dashboardScreen.className = 'container mx-auto px-4 py-8 hidden';
+                dashboardScreen.innerHTML = '<div class="text-center"><h2>Dashboard đang tải...</h2></div>';
+                const footer = document.querySelector('footer');
+                document.body.insertBefore(dashboardScreen, footer);
+            });
+    </script>
     
     <!-- Footer -->
-    <footer class="bg-gradient-to-r from-blue-50 to-purple-50 border-t border-blue-100 py-4 mt-8">
+    <footer class="bg-gradient-to-r from-blue-50 to-cyan-50 border-t border-blue-100 py-4 mt-8">
         <div class="container mx-auto px-4 text-center">
             <div class="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
                 <div class="text-sm text-blue-600">
-                    <span class="font-semibold">🐍 Ứng Dụng Thi Trắc Nghiệm Python</span>
-                    <span class="bg-blue-500 text-white px-2 py-1 rounded text-xs ml-2">v1.0</span>
+                    <span class="font-semibold">📚 Hệ Thống Thi Trắc Nghiệm Đa Chủ Đề</span>
+                    <span class="bg-blue-500 text-white px-2 py-1 rounded text-xs ml-2">v2.0</span>
                 </div>
                 <div class="text-sm text-blue-600">
                     <span class="mr-2">👨‍💻</span>

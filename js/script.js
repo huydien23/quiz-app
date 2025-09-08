@@ -1,4 +1,4 @@
-// Quiz application main script
+// Quiz application main script with Firebase integration
 class QuizApp {
     constructor() {
         this.questions = [];
@@ -8,13 +8,19 @@ class QuizApp {
         this.timerInterval = null;
         this.isQuizStarted = false;
         this.isQuizCompleted = false;
+        this.currentTopic = null; // Track current topic
+        this.currentUser = null; // Track current user
+        this.sessionId = null; // Track quiz session
         
         this.initializeElements();
         this.attachEventListeners();
+        this.initializeAuth();
     }
 
     initializeElements() {
         // Screen elements
+        this.authScreen = document.getElementById('authScreen');
+        this.topicScreen = document.getElementById('topicScreen');
         this.startScreen = document.getElementById('startScreen');
         this.quizScreen = document.getElementById('quizScreen');
         this.resultsScreen = document.getElementById('resultsScreen');
@@ -30,6 +36,8 @@ class QuizApp {
         
         // Button elements
         this.startBtn = document.getElementById('startBtn');
+        this.backToTopicsBtn = document.getElementById('backToTopicsBtn');
+        this.logoutBtn = document.getElementById('logoutBtn');
         this.prevBtn = document.getElementById('prevBtn');
         this.nextBtn = document.getElementById('nextBtn');
         this.submitBtn = document.getElementById('submitBtn');
@@ -63,12 +71,27 @@ class QuizApp {
         this.scoreIconElement = document.getElementById('scoreIcon');
         this.reviewContentElement = document.getElementById('reviewContent');
         
+        // Auth elements
+        this.loginBtn = document.getElementById('loginBtn');
+        this.googleLoginBtn = document.getElementById('googleLoginBtn');
+        this.registerBtn = document.getElementById('registerBtn');
+        this.googleRegisterBtn = document.getElementById('googleRegisterBtn');
+        this.showRegisterBtn = document.getElementById('showRegisterBtn');
+        this.showLoginBtn = document.getElementById('showLoginBtn');
+        this.loginForm = document.getElementById('loginForm');
+        this.registerForm = document.getElementById('registerForm');
+        this.authError = document.getElementById('authError');
+        this.authSuccess = document.getElementById('authSuccess');
+        this.currentUserName = document.getElementById('currentUserName');
+        
         // Back to top button
         this.backToTopBtn = document.getElementById('backToTopBtn');
     }
 
     attachEventListeners() {
         this.startBtn.addEventListener('click', () => this.startQuiz());
+        this.backToTopicsBtn.addEventListener('click', () => this.showTopicSelection());
+        this.logoutBtn.addEventListener('click', () => this.logout());
         this.prevBtn.addEventListener('click', () => this.previousQuestion());
         this.nextBtn.addEventListener('click', () => this.nextQuestion());
         this.submitBtn.addEventListener('click', () => this.submitQuiz());
@@ -143,6 +166,22 @@ class QuizApp {
             });
         });
         
+        // Topic selection event listeners
+        document.querySelectorAll('.topic-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const topic = card.dataset.topic;
+                this.selectTopic(topic);
+            });
+        });
+        
+        // Auth event listeners
+        this.loginBtn.addEventListener('click', () => this.login());
+        this.googleLoginBtn.addEventListener('click', () => this.googleSignIn());
+        this.registerBtn.addEventListener('click', () => this.register());
+        this.googleRegisterBtn.addEventListener('click', () => this.googleSignIn());
+        this.showRegisterBtn.addEventListener('click', () => this.showRegisterForm());
+        this.showLoginBtn.addEventListener('click', () => this.showLoginForm());
+        
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (!this.isQuizStarted || this.isQuizCompleted) return;
@@ -183,8 +222,293 @@ class QuizApp {
         });
     }
 
+    // Firebase Authentication methods
+    initializeAuth() {
+        // Check if user is already logged in
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                this.currentUser = user;
+                this.updateUserInfo();
+                // Load dashboard data if dashboard is available
+                if (typeof dashboardManager !== 'undefined') {
+                    await dashboardManager.loadDashboardData(user);
+                }
+                this.showDashboard();
+            } else {
+                this.currentUser = null;
+                this.showAuthScreen();
+            }
+        });
+    }
+    
+    showAuthScreen() {
+        this.showScreen('auth');
+    }
+    
+    showLoginForm() {
+        this.loginForm.classList.remove('hidden');
+        this.registerForm.classList.add('hidden');
+        this.clearAuthMessages();
+    }
+    
+    showRegisterForm() {
+        this.loginForm.classList.add('hidden');
+        this.registerForm.classList.remove('hidden');
+        this.clearAuthMessages();
+    }
+    
+    clearAuthMessages() {
+        this.authError.classList.add('hidden');
+        this.authSuccess.classList.add('hidden');
+    }
+    
+    showAuthError(message) {
+        this.authError.textContent = message;
+        this.authError.classList.remove('hidden');
+        this.authSuccess.classList.add('hidden');
+    }
+    
+    showAuthSuccess(message) {
+        this.authSuccess.textContent = message;
+        this.authSuccess.classList.remove('hidden');
+        this.authError.classList.add('hidden');
+    }
+    
+    async login() {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        if (!email || !password) {
+            this.showAuthError('Vui lòng nhập đầy đủ thông tin!');
+            return;
+        }
+        
+        try {
+            this.loginBtn.disabled = true;
+            this.loginBtn.textContent = 'Đang đăng nhập...';
+            
+            await auth.signInWithEmailAndPassword(email, password);
+            this.showAuthSuccess('Đăng nhập thành công!');
+            
+        } catch (error) {
+            this.showAuthError(this.getFirebaseErrorMessage(error.code));
+        } finally {
+            this.loginBtn.disabled = false;
+            this.loginBtn.innerHTML = '🚀 Đăng Nhập';
+        }
+    }
+    
+    async register() {
+        const name = document.getElementById('registerName').value;
+        const email = document.getElementById('registerEmail').value;
+        const password = document.getElementById('registerPassword').value;
+        
+        if (!name || !email || !password) {
+            this.showAuthError('Vui lòng nhập đầy đủ thông tin!');
+            return;
+        }
+        
+        if (password.length < 6) {
+            this.showAuthError('Mật khẩu phải có ít nhất 6 ký tự!');
+            return;
+        }
+        
+        try {
+            this.registerBtn.disabled = true;
+            this.registerBtn.textContent = 'Đang đăng ký...';
+            
+            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+            const user = userCredential.user;
+            
+            // Update user profile with name
+            await user.updateProfile({
+                displayName: name
+            });
+            
+            // Save user info to database
+            await database.ref('users/' + user.uid).set({
+                name: name,
+                email: email,
+                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                authProvider: 'email'
+            });
+            
+            this.showAuthSuccess('Đăng ký thành công!');
+            
+        } catch (error) {
+            this.showAuthError(this.getFirebaseErrorMessage(error.code));
+        } finally {
+            this.registerBtn.disabled = false;
+            this.registerBtn.innerHTML = '✅ Đăng Ký';
+        }
+    }
+    
+    async googleSignIn() {
+        try {
+            // Disable both Google buttons
+            if (this.googleLoginBtn) {
+                this.googleLoginBtn.disabled = true;
+                this.googleLoginBtn.innerHTML = '<div class="loading inline mr-2"></div>Đang đăng nhập...';
+            }
+            if (this.googleRegisterBtn) {
+                this.googleRegisterBtn.disabled = true;
+                this.googleRegisterBtn.innerHTML = '<div class="loading inline mr-2"></div>Đang đăng nhập...';
+            }
+            
+            // Create Google provider
+            const provider = new firebase.auth.GoogleAuthProvider();
+            provider.addScope('email');
+            provider.addScope('profile');
+            
+            // Sign in with popup
+            const result = await auth.signInWithPopup(provider);
+            const user = result.user;
+            
+            // Check if this is a new user
+            const userRef = database.ref('users/' + user.uid);
+            const snapshot = await userRef.once('value');
+            
+            if (!snapshot.exists()) {
+                // New user - save to database
+                await userRef.set({
+                    name: user.displayName || 'Người dùng Google',
+                    email: user.email,
+                    photoURL: user.photoURL || null,
+                    createdAt: firebase.database.ServerValue.TIMESTAMP,
+                    authProvider: 'google',
+                    googleId: user.providerData[0]?.uid || null
+                });
+            } else {
+                // Existing user - update last login
+                await userRef.update({
+                    lastLoginAt: firebase.database.ServerValue.TIMESTAMP
+                });
+            }
+            
+            this.showAuthSuccess('Đăng nhập Google thành công!');
+            
+        } catch (error) {
+            console.error('Google Sign-In Error:', error);
+            
+            if (error.code === 'auth/popup-closed-by-user') {
+                this.showAuthError('Bạn đã đóng cửa sổ đăng nhập Google.');
+            } else if (error.code === 'auth/popup-blocked') {
+                this.showAuthError('Trình duyệt đã chặn popup. Vui lòng cho phép popup và thử lại.');
+            } else {
+                this.showAuthError(this.getFirebaseErrorMessage(error.code));
+            }
+        } finally {
+            // Re-enable Google buttons
+            if (this.googleLoginBtn) {
+                this.googleLoginBtn.disabled = false;
+                this.googleLoginBtn.innerHTML = `
+                    <svg class="w-5 h-5 inline mr-2" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Đăng Nhập Bằng Google
+                `;
+            }
+            if (this.googleRegisterBtn) {
+                this.googleRegisterBtn.disabled = false;
+                this.googleRegisterBtn.innerHTML = `
+                    <svg class="w-5 h-5 inline mr-2" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Đăng Ký Bằng Google
+                `;
+            }
+        }
+    }
+    
+    async logout() {
+        try {
+            await auth.signOut();
+            this.showAuthSuccess('Đăng xuất thành công!');
+        } catch (error) {
+            this.showAuthError('Đăng xuất thất bại!');
+        }
+    }
+    
+    updateUserInfo() {
+        if (this.currentUser && this.currentUserName) {
+            const displayName = this.currentUser.displayName || this.currentUser.email;
+            this.currentUserName.textContent = displayName;
+        }
+    }
+    
+    getFirebaseErrorMessage(errorCode) {
+        switch (errorCode) {
+            case 'auth/user-not-found':
+                return 'Không tìm thấy tài khoản với email này!';
+            case 'auth/wrong-password':
+                return 'Mật khẩu không chính xác!';
+            case 'auth/email-already-in-use':
+                return 'Email này đã được sử dụng!';
+            case 'auth/weak-password':
+                return 'Mật khẩu quá yếu!';
+            case 'auth/invalid-email':
+                return 'Email không hợp lệ!';
+            default:
+                return 'Có lỗi xảy ra, vui lòng thử lại!';
+        }
+    }
+
+    showTopicSelection() {
+        this.showScreen('topic');
+    }
+
+    showDashboard() {
+        this.showScreen('dashboard');
+    }
+
+    selectTopic(topic) {
+        this.currentTopic = topic;
+        
+        // Update start screen based on selected topic
+        const topicIcon = document.getElementById('topicIcon');
+        const topicTitle = document.getElementById('topicTitle');
+        const topicDescription = document.getElementById('topicDescription');
+        
+        if (topic === 'python') {
+            topicIcon.textContent = '🐍';
+            topicTitle.innerHTML = `
+                Bài Thi Trắc Nghiệm Python
+                <span class="inline-block text-xs font-normal bg-blue-500 text-white px-2 py-1 rounded-full ml-2 align-middle">v2.0</span>
+            `;
+            topicDescription.textContent = 'Kiểm tra kiến thức Python của bạn với 40 câu hỏi ngẫu nhiên';
+        } else if (topic === 'opensource') {
+            topicIcon.textContent = '🌟';
+            topicTitle.innerHTML = `
+                Bài Thi Phát Triển Phần Mềm Nguồn Mở
+                <span class="inline-block text-xs font-normal bg-green-500 text-white px-2 py-1 rounded-full ml-2 align-middle">v2.0</span>
+            `;
+            topicDescription.textContent = 'Kiểm tra kiến thức về FOSS, Git, License và Community';
+        }
+        
+        this.showScreen('start');
+    }
+
     startQuiz() {
-        this.questions = getRandomQuestions(40);
+        // Load questions based on current topic
+        if (this.currentTopic === 'python') {
+            this.questions = getRandomQuestions(40);
+        } else if (this.currentTopic === 'opensource') {
+            this.questions = getRandomOpenSourceQuestions(40);
+        } else {
+            // Default to Python if no topic selected
+            this.questions = getRandomQuestions(40);
+        }
+        
+        // Create session ID and track quiz start
+        this.sessionId = this.generateSessionId();
+        this.trackQuizStart();
+        
         this.userAnswers = new Array(this.questions.length).fill(-1);
         this.currentQuestionIndex = 0;
         this.timeRemaining = 60 * 60; // 60 minutes
@@ -219,12 +543,25 @@ class QuizApp {
     }
 
     showScreen(screenName) {
+        this.authScreen.classList.add('hidden');
+        const dashboardScreen = document.getElementById('dashboardScreen');
+        if (dashboardScreen) dashboardScreen.classList.add('hidden');
+        this.topicScreen.classList.add('hidden');
         this.startScreen.classList.add('hidden');
         this.quizScreen.classList.add('hidden');
         this.resultsScreen.classList.add('hidden');
         this.reviewScreen.classList.add('hidden');
         
         switch(screenName) {
+            case 'auth':
+                this.authScreen.classList.remove('hidden');
+                break;
+            case 'dashboard':
+                if (dashboardScreen) dashboardScreen.classList.remove('hidden');
+                break;
+            case 'topic':
+                this.topicScreen.classList.remove('hidden');
+                break;
             case 'start':
                 this.startScreen.classList.remove('hidden');
                 break;
@@ -402,6 +739,9 @@ class QuizApp {
         this.score = correctAnswers * 0.25; // Each correct answer = 0.25 points
         this.maxScore = this.questions.length * 0.25; // Total possible score = 10 points
         this.percentage = Math.round((correctAnswers / this.questions.length) * 100);
+        
+        // Save quiz results to Firebase
+        this.saveQuizResults();
     }
 
     showResults() {
@@ -556,7 +896,7 @@ class QuizApp {
             this.cancelQuizBtn.title = 'Bắt đầu quiz để sử dụng';
         }
         
-        this.showScreen('start');
+        this.showScreen('topic');
     }
 
     // Reset and Cancel functionality
@@ -1505,6 +1845,143 @@ QuizApp.prototype.setupBackToTopButton = function() {
     // Initial check
     this.handleBackToTopVisibility();
 };
+
+// User tracking and data methods
+QuizApp.prototype.generateSessionId = function() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+};
+
+QuizApp.prototype.trackQuizStart = async function() {
+    if (!this.currentUser || !this.sessionId) return;
+    
+    const sessionData = {
+        userId: this.currentUser.uid,
+        userEmail: this.currentUser.email,
+        userName: this.currentUser.displayName || this.currentUser.email,
+        sessionId: this.sessionId,
+        topic: this.currentTopic,
+        startTime: firebase.database.ServerValue.TIMESTAMP,
+        status: 'started',
+        questionsCount: this.questions.length
+    };
+    
+    try {
+        await database.ref('quiz-sessions/' + this.sessionId).set(sessionData);
+        
+        // Also track in user's quiz history
+        await database.ref('users/' + this.currentUser.uid + '/quiz-history/' + this.sessionId).set({
+            topic: this.currentTopic,
+            startTime: firebase.database.ServerValue.TIMESTAMP,
+            status: 'started'
+        });
+    } catch (error) {
+        console.error('Error tracking quiz start:', error);
+    }
+};
+
+QuizApp.prototype.saveQuizResults = async function() {
+    if (!this.currentUser || !this.sessionId) return;
+    
+    const endTime = Date.now();
+    const timeSpent = 3600 - this.timeRemaining; // Total time spent in seconds
+    
+    const resultData = {
+        sessionId: this.sessionId,
+        userId: this.currentUser.uid,
+        userEmail: this.currentUser.email,
+        userName: this.currentUser.displayName || this.currentUser.email,
+        topic: this.currentTopic,
+        score: this.score,
+        percentage: this.percentage,
+        correctAnswers: this.correctCount,
+        wrongAnswers: this.wrongCount,
+        totalQuestions: this.questions.length,
+        timeSpent: timeSpent,
+        endTime: firebase.database.ServerValue.TIMESTAMP,
+        status: 'completed',
+        answers: this.userAnswers,
+        questions: this.questions.map(q => ({
+            id: q.id,
+            question: q.question,
+            correct: q.correct
+        }))
+    };
+    
+    try {
+        // Update session with results
+        await database.ref('quiz-sessions/' + this.sessionId).update({
+            ...resultData,
+            status: 'completed'
+        });
+        
+        // Update user's quiz history
+        await database.ref('users/' + this.currentUser.uid + '/quiz-history/' + this.sessionId).update({
+            score: this.score,
+            percentage: this.percentage,
+            endTime: firebase.database.ServerValue.TIMESTAMP,
+            status: 'completed',
+            timeSpent: timeSpent
+        });
+        
+        // Update user's statistics
+        this.updateUserStats();
+        
+        // Update dashboard stats if available
+        if (typeof dashboardManager !== 'undefined') {
+            await dashboardManager.updateStatsAfterQuiz(this.currentUser.uid, {
+                topic: this.currentTopic,
+                score: this.score,
+                correctAnswers: this.correctCount,
+                startTime: endTime - (timeSpent * 1000),
+                endTime: endTime
+            });
+        }
+        
+    } catch (error) {
+        console.error('Error saving quiz results:', error);
+    }
+};
+
+QuizApp.prototype.updateUserStats = async function() {
+    if (!this.currentUser) return;
+    
+    const userStatsRef = database.ref('users/' + this.currentUser.uid + '/stats');
+    
+    try {
+        const snapshot = await userStatsRef.once('value');
+        const currentStats = snapshot.val() || {
+            totalQuizzes: 0,
+            totalScore: 0,
+            averageScore: 0,
+            bestScore: 0,
+            topicStats: {}
+        };
+        
+        const newStats = {
+            totalQuizzes: currentStats.totalQuizzes + 1,
+            totalScore: currentStats.totalScore + this.score,
+            averageScore: (currentStats.totalScore + this.score) / (currentStats.totalQuizzes + 1),
+            bestScore: Math.max(currentStats.bestScore || 0, this.score),
+            lastQuizDate: firebase.database.ServerValue.TIMESTAMP,
+            topicStats: {
+                ...currentStats.topicStats,
+                [this.currentTopic]: {
+                    count: (currentStats.topicStats[this.currentTopic]?.count || 0) + 1,
+                    totalScore: (currentStats.topicStats[this.currentTopic]?.totalScore || 0) + this.score,
+                    bestScore: Math.max(currentStats.topicStats[this.currentTopic]?.bestScore || 0, this.score),
+                    lastScore: this.score
+                }
+            }
+        };
+        
+        await userStatsRef.set(newStats);
+        
+    } catch (error) {
+        console.error('Error updating user stats:', error);
+    }
+};
+
+// Back to Top Button Functionality
 
 QuizApp.prototype.handleBackToTopVisibility = function() {
     if (!this.backToTopBtn) return;

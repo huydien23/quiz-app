@@ -1,10 +1,28 @@
-# 🐍 Ứng Dụng Thi Trắc Nghiệm Python
+# 📚 Hệ Thống Thi Trắc Nghiệm Đa Chủ Đề v2.0
 
-Một ứng dụng web thi trắc nghiệm Python với giao diện hiện đại, thân thiện và đầy đủ tính năng.
+Một ứng dụng web thi trắc nghiệm với giao diện hiện đại, hỗ trợ đa chủ đề và tích hợp Firebase để theo dõi người dùng.
 
 ## 📋 Tác Giả
 
 **Nguyễn Huy Điền**
+
+## 🔥 **MỚI** - Tính Năng v2.0
+
+### 🔐 **Xác Thực Người Dùng**
+- **Đăng ký/Đăng nhập** với email và mật khẩu
+- **Đăng nhập Google** nên lọng và tiện lợi 🚀
+- **Theo dõi phiên làm bài** với Firebase Authentication
+- **Lưu trữ thông tin** người dùng an toàn
+
+### 📊 **Theo Dõi & Thống Kê**
+- **Lịch sử thi** chi tiết của từng người dùng
+- **Thống kê cá nhân**: tổng số bài, điểm trung bình, điểm cao nhất
+- **Phân tích theo chủ đề** Python và Open Source
+- **Lưu trữ kết quả** thời gian thực với Firebase Realtime Database
+
+### 🎯 **Đa Chủ Đề**
+- **Lập Trình Python** 🐍: 129 câu hỏi từ cơ bản đến nâng cao
+- **Phát Triển Phần Mềm Nguồn Mở** 🌟: 50 câu hỏi về FOSS, Git, GitHub, Licenses
 
 ## ✨ Tính Năng Chính
 
@@ -60,14 +78,49 @@ quiz-app/
 └── README.md           # Tài liệu hướng dẫn
 ```
 
-## 🚀 Hướng Dẫn Sử Dụng
+## 🚀 Hướng Dẫn Cài Đặt
 
-### Cài Đặt và Chạy
-1. **Clone hoặc tải dự án** về máy
+### Bước 1: Cài Đặt Cơ Bản
+1. **Tải dự án** về máy hoặc clone repository
 2. **Mở file `index.html`** trong trình duyệt web
-3. **Bắt đầu sử dụng** ngay lập tức
 
-### Hướng Dẫn Thi
+### Bước 2: Cấu Hình Firebase (Đợc quyền từ tác giả)
+
+**🎉 Tin tốt! Firebase đã được cấu hình sẵn với project thực tế!**
+
+**Project Firebase**: `cloud-quiz-app-98ad4`
+**Console URL**: https://console.firebase.google.com/project/cloud-quiz-app-98ad4
+
+#### Chỉ cần thực hiện 2 bước:
+
+🔴 **Bước 2.1: Kích hoạt Authentication**
+1. Vào [Authentication Console](https://console.firebase.google.com/project/cloud-quiz-app-98ad4/authentication/providers)
+2. Click tab "Sign-in method" 
+3. Kích hoạt **Email/Password** provider
+4. Kích hoạt **Google** provider và chọn email hỗ trợ
+
+🔴 **Bước 2.2: Tạo Realtime Database**
+1. Vào [Database Console](https://console.firebase.google.com/project/cloud-quiz-app-98ad4/database)
+2. Tạo "Realtime Database" nếu chưa có
+3. Chọn region: **Singapore** (gần Việt Nam nhất)
+4. Copy Database Rules từ file `firebase-config.js`
+
+#### 📄 Chi tiết setup: Đọc file [`FIREBASE_SETUP.md`](./FIREBASE_SETUP.md)
+
+### Bước 3: Test Ứng Dụng
+
+1. **Mở `index.html`** trong trình duyệt
+2. **Test đăng ký**: Tạo tài khoản mới với email hợp lệ
+3. **Test đăng nhập**: Đăng nhập với tài khoản vừa tầo
+4. **Test quiz**: Chọn chủ đề và làm thử một bài thi
+5. **Kiểm tra dữ liệu**: Vào Firebase Console để xem dữ liệu đã được lưu
+
+👍 **Nếu mọi thứ hoạt động**: Chúc mừng! Ứng dụng đã sẵn sàng!
+👎 **Nếu có lỗi**: Đọc file [`FIREBASE_SETUP.md`](./FIREBASE_SETUP.md) để troubleshooting
+
+---
+
+## 📊 Hướng Dẫn Sử Dụng
 1. **Đọc hướng dẫn** trên màn hình chào mừng
 2. **Nhấn "Bắt Đầu Thi"** để khởi động bài thi
 3. **Đọc câu hỏi** và chọn đáp án đúng nhất

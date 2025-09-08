@@ -1,0 +1,170 @@
+<!-- User Dashboard Screen -->
+<div id="dashboardScreen" class="container mx-auto px-4 py-8 hidden">
+    <!-- Dashboard Header -->
+    <div class="max-w-6xl mx-auto mb-8">
+        <div class="quiz-card p-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-full flex items-center justify-center text-white text-2xl font-bold" id="userAvatar">
+                        👤
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800" id="dashboardUserName">Người dùng</h2>
+                        <p class="text-gray-600" id="dashboardUserEmail">user@example.com</p>
+                        <div class="flex items-center mt-1">
+                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full" id="userProvider">Email</span>
+                            <span class="text-xs text-gray-500 ml-2" id="userJoinDate">Tham gia: 01/01/2025</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex space-x-3">
+                    <button id="dashboardToTopicsBtn" class="btn btn-primary py-2 px-4 text-sm font-bold">
+                        📚 Thi Mới
+                    </button>
+                    <button id="dashboardLogoutBtn" class="btn btn-secondary py-2 px-4 text-sm font-bold">
+                        🚪 Đăng Xuất
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="max-w-6xl mx-auto mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Total Quizzes -->
+            <div class="quiz-card p-6 text-center">
+                <div class="text-3xl mb-2">📊</div>
+                <h3 class="text-lg font-bold text-gray-800 mb-1">Tổng Bài Thi</h3>
+                <p class="text-2xl font-bold text-blue-600" id="totalQuizzes">0</p>
+            </div>
+
+            <!-- Average Score -->
+            <div class="quiz-card p-6 text-center">
+                <div class="text-3xl mb-2">📈</div>
+                <h3 class="text-lg font-bold text-gray-800 mb-1">Điểm Trung Bình</h3>
+                <p class="text-2xl font-bold text-green-600" id="averageScore">0.0</p>
+            </div>
+
+            <!-- Best Score -->
+            <div class="quiz-card p-6 text-center">
+                <div class="text-3xl mb-2">🏆</div>
+                <h3 class="text-lg font-bold text-gray-800 mb-1">Điểm Cao Nhất</h3>
+                <p class="text-2xl font-bold text-orange-600" id="bestScore">0.0</p>
+            </div>
+
+            <!-- Study Time -->
+            <div class="quiz-card p-6 text-center">
+                <div class="text-3xl mb-2">⏱️</div>
+                <h3 class="text-lg font-bold text-gray-800 mb-1">Thời Gian Học</h3>
+                <p class="text-2xl font-bold text-cyan-600" id="studyTime">0h</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Topic Performance -->
+    <div class="max-w-6xl mx-auto mb-8">
+        <div class="quiz-card p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <span class="mr-2">📚</span>
+                Thành Tích Theo Chủ Đề
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Python Stats -->
+                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-lg border border-blue-200">
+                    <div class="flex items-center mb-3">
+                        <span class="text-2xl mr-3">🐍</span>
+                        <h4 class="text-lg font-bold text-blue-800">Lập Trình Python</h4>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-blue-700">Số bài đã thi:</span>
+                            <span class="font-bold text-blue-800" id="pythonQuizzes">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-blue-700">Điểm trung bình:</span>
+                            <span class="font-bold text-blue-800" id="pythonAverage">0.0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-blue-700">Điểm cao nhất:</span>
+                            <span class="font-bold text-blue-800" id="pythonBest">0.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Open Source Stats -->
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200">
+                    <div class="flex items-center mb-3">
+                        <span class="text-2xl mr-3">🌟</span>
+                        <h4 class="text-lg font-bold text-green-800">Phát Triển Nguồn Mở</h4>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-green-700">Số bài đã thi:</span>
+                            <span class="font-bold text-green-800" id="opensourceQuizzes">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-green-700">Điểm trung bình:</span>
+                            <span class="font-bold text-green-800" id="opensourceAverage">0.0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-green-700">Điểm cao nhất:</span>
+                            <span class="font-bold text-green-800" id="opensourceBest">0.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Quiz History -->
+    <div class="max-w-6xl mx-auto mb-8">
+        <div class="quiz-card p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                    <span class="mr-2">📋</span>
+                    Lịch Sử Thi Gần Đây
+                </h3>
+                <button id="viewAllHistoryBtn" class="btn btn-secondary py-1 px-3 text-sm">
+                    Xem Tất Cả
+                </button>
+            </div>
+            <div id="recentQuizHistory" class="space-y-3">
+                <!-- Quiz history items will be loaded here -->
+                <div class="text-center text-gray-500 py-8">
+                    <span class="text-4xl mb-2 block">📝</span>
+                    <p>Chưa có bài thi nào. Hãy bắt đầu thi để xem lịch sử!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="max-w-6xl mx-auto mb-8">
+        <div class="quiz-card p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <span class="mr-2">⚡</span>
+                Thao Tác Nhanh
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button class="action-card p-4 rounded-lg border-2 border-blue-200 hover:border-blue-400 transition-all" onclick="app.selectTopic('python')">
+                    <div class="text-3xl mb-2">🐍</div>
+                    <h4 class="font-bold text-blue-800 mb-1">Thi Python</h4>
+                    <p class="text-sm text-blue-600">Kiểm tra kiến thức Python</p>
+                </button>
+                
+                <button class="action-card p-4 rounded-lg border-2 border-green-200 hover:border-green-400 transition-all" onclick="app.selectTopic('opensource')">
+                    <div class="text-3xl mb-2">🌟</div>
+                    <h4 class="font-bold text-green-800 mb-1">Thi Open Source</h4>
+                    <p class="text-sm text-green-600">Kiểm tra kiến thức FOSS</p>
+                </button>
+                
+                <button class="action-card p-4 rounded-lg border-2 border-gray-200 hover:border-gray-400 transition-all" onclick="app.showScreen('topic')">
+                    <div class="text-3xl mb-2">📚</div>
+                    <h4 class="font-bold text-gray-800 mb-1">Chọn Chủ Đề</h4>
+                    <p class="text-sm text-gray-600">Xem tất cả chủ đề</p>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
