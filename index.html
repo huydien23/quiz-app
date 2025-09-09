@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -7,19 +8,87 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#1e40af">
-    <title>Ứng Dụng Thi Trắc Nghiệm Python v1.0</title>
+    <title>Ứng Dụng Thi Trắc Nghiệm v2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body class="bg-gray-100 min-h-screen">
+    <!-- Subject Selection Screen -->
+    <div id="subjectScreen" class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto quiz-card p-8 text-center">
+            <div class="mb-8">
+                <div class="text-6xl mb-4">🎓</div>
+                <h1
+                    class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-green-600 mb-6">
+                    Hệ Thống Thi Trắc Nghiệm Đa Chủ Đề
+                    <span
+                        class="inline-block text-xs font-normal bg-gradient-to-r from-blue-500 to-green-500 text-white px-2 py-1 rounded-full ml-2 align-middle">v2.0</span>
+                </h1>
+                <p class="text-gray-600 mb-8 text-lg">Chọn chủ đề bài thi phù hợp với bạn</p>
+                <div class="bg-gradient-to-r from-blue-50 to-green-50 p-4 rounded-lg mb-8">
+                    <p class="text-blue-800 font-semibold flex items-center justify-center">
+                        <span class="mr-2">👨‍💻</span>
+                        <span>Được phát triển bởi: <strong>Nguyễn Huy Điền</strong></span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Subject Options -->
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <!-- Python Quiz -->
+                <div class="quiz-subject-card bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-2xl border-2 border-blue-200 hover:border-blue-400 transition-all cursor-pointer"
+                    data-subject="python">
+                    <div class="text-5xl mb-4">🐍</div>
+                    <h3 class="text-2xl font-bold text-blue-800 mb-4">Lập Trình Python</h3>
+                    <div class="text-left text-blue-700 space-y-2 mb-6">
+                        <p class="flex items-center"><span class="text-green-500 mr-2">📊</span> 40 câu hỏi ngẫu nhiên
+                        </p>
+                        <p class="flex items-center"><span class="text-green-500 mr-2">⏱️</span> Thời gian: 60 phút</p>
+                        <p class="flex items-center"><span class="text-green-500 mr-2">🎯</span> Kiểm tra kiến thức
+                            Python</p>
+                        <p class="flex items-center"><span class="text-green-500 mr-2">📈</span> Điểm đạt: 60%</p>
+                    </div>
+                    <button class="btn btn-primary w-full py-3 px-6 font-bold">
+                        Chọn Python
+                    </button>
+                </div>
+
+                <!-- Open Source Quiz -->
+                <div class="quiz-subject-card bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-2xl border-2 border-green-200 hover:border-green-400 transition-all cursor-pointer"
+                    data-subject="opensource">
+                    <div class="text-5xl mb-4">📖</div>
+                    <h3 class="text-2xl font-bold text-green-800 mb-4">Phát Triển Phần Mềm Nguồn Mở</h3>
+                    <div class="text-left text-green-700 space-y-2 mb-6">
+                        <p class="flex items-center"><span class="text-blue-500 mr-2">📊</span> 40 câu hỏi ngẫu nhiên
+                        </p>
+                        <p class="flex items-center"><span class="text-blue-500 mr-2">⏱️</span> Thời gian: 60 phút</p>
+                        <p class="flex items-center"><span class="text-blue-500 mr-2">🎯</span> Kiểm tra kiến thức
+                            Open Source</p>
+                        <p class="flex items-center"><span class="text-blue-500 mr-2">📈</span> Điểm đạt: 60%</p>
+                    </div>
+                    <button class="btn btn-success w-full py-3 px-6 font-bold">
+                        Chọn Open Source
+                    </button>
+                </div>
+            </div>
+
+            <div class="text-sm text-gray-500">
+                💡 Mỗi bài thi có câu hỏi được chọn ngẫu nhiên từ ngân hàng câu hỏi phong phú
+            </div>
+        </div>
+    </div>
+
     <!-- Start Screen -->
-    <div id="startScreen" class="container mx-auto px-4 py-8">
+    <div id="startScreen" class="container mx-auto px-4 py-8 hidden">
         <div class="max-w-2xl mx-auto quiz-card p-8 text-center">
             <div class="mb-8">
                 <div class="text-6xl mb-4">🐍</div>
-                <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800 mb-6">
+                <h1
+                    class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800 mb-6">
                     Bài Thi Trắc Nghiệm Python
-                    <span class="inline-block text-xs font-normal bg-blue-500 text-white px-2 py-1 rounded-full ml-2 align-middle">v1.0</span>
+                    <span
+                        class="inline-block text-xs font-normal bg-blue-500 text-white px-2 py-1 rounded-full ml-2 align-middle">v2.0</span>
                 </h1>
                 <p class="text-gray-600 mb-4 text-lg">Kiểm tra kiến thức Python của bạn với 40 câu hỏi ngẫu nhiên</p>
                 <div class="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-lg mb-6">
@@ -32,10 +101,14 @@
             <div class="quiz-card p-6 mb-8 bg-gradient-to-r from-blue-50 to-cyan-50">
                 <p class="text-blue-800 font-semibold mb-4"><strong>📋 Hướng dẫn:</strong></p>
                 <ul class="text-left text-blue-700 space-y-3">
-                    <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> 40 câu hỏi được chọn ngẫu nhiên từ ngân hàng câu hỏi</li>
-                    <li class="flex items-center"><span class="text-green-500 mr-2">⏱️</span> Thời gian làm bài: 60 phút</li>
-                    <li class="flex items-center"><span class="text-green-500 mr-2">🎯</span> Chọn đáp án đúng nhất cho mỗi câu hỏi</li>
-                    <li class="flex items-center"><span class="text-green-500 mr-2">🔄</span> Bạn có thể chuyển đổi giữa các câu hỏi</li>
+                    <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> 40 câu hỏi được chọn ngẫu
+                        nhiên từ ngân hàng câu hỏi</li>
+                    <li class="flex items-center"><span class="text-green-500 mr-2">⏱️</span> Thời gian làm bài: 60 phút
+                    </li>
+                    <li class="flex items-center"><span class="text-green-500 mr-2">🎯</span> Chọn đáp án đúng nhất cho
+                        mỗi câu hỏi</li>
+                    <li class="flex items-center"><span class="text-green-500 mr-2">🔄</span> Bạn có thể chuyển đổi giữa
+                        các câu hỏi</li>
                 </ul>
             </div>
             <button id="startBtn" class="btn btn-primary py-4 px-10 text-lg font-bold shadow-xl">
@@ -50,16 +123,19 @@
         <div class="max-w-4xl mx-auto mb-6">
             <div class="quiz-header p-6 flex justify-between items-center">
                 <div class="flex items-center space-x-4">
-                    <div class="bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-4 py-2 rounded-full font-semibold">
+                    <div
+                        class="bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-4 py-2 rounded-full font-semibold">
                         📋 Câu <span id="currentQuestion">1</span> / <span id="totalQuestions">40</span>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
                     <div id="timer" class="timer">⏱️ 60:00</div>
-                    <button id="resetQuizBtn" class="btn btn-secondary py-2 px-4 text-sm font-bold" title="Reset câu trả lời hiện tại">
+                    <button id="resetQuizBtn" class="btn btn-secondary py-2 px-4 text-sm font-bold"
+                        title="Reset câu trả lời hiện tại">
                         🔄 Reset
                     </button>
-                    <button id="cancelQuizBtn" class="btn btn-secondary py-2 px-4 text-sm font-bold" title="Hủy bài thi">
+                    <button id="cancelQuizBtn" class="btn btn-secondary py-2 px-4 text-sm font-bold"
+                        title="Hủy bài thi">
                         ❌ Hủy
                     </button>
                     <button id="printQuizBtn" class="btn btn-print py-2 px-4 text-sm font-bold" title="In đề thi">
@@ -99,7 +175,9 @@
     <div id="resultsScreen" class="container mx-auto px-4 py-8 hidden">
         <div class="max-w-2xl mx-auto result-card p-8 text-center">
             <div class="mb-8">
-                <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600 mb-6">🎉 Hoàn Thành Bài Thi!</h1>
+                <h1
+                    class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600 mb-6">
+                    🎉 Hoàn Thành Bài Thi!</h1>
                 <div class="text-6xl mb-6" id="scoreIcon">🎉</div>
                 <div class="score-display mb-4" id="finalScore">Điểm: 0/40</div>
                 <div class="percentage-display mb-8" id="percentage">0%</div>
@@ -128,7 +206,9 @@
     <div id="reviewScreen" class="container mx-auto px-4 py-8 hidden">
         <div class="max-w-4xl mx-auto">
             <div class="quiz-card p-6 mb-6">
-                <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 mb-6">📝 Xem Lại Câu Trả Lời</h2>
+                <h2
+                    class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 mb-6">
+                    📝 Xem Lại Câu Trả Lời</h2>
                 <button id="backToResultsBtn" class="btn btn-secondary py-2 px-4 font-bold mb-4">
                     ← Về Kết Quả
                 </button>
@@ -145,7 +225,8 @@
                 <button id="closePrintModal" class="text-gray-500 hover:text-gray-700 text-3xl">&times;</button>
             </div>
             <div class="space-y-4">
-                <div class="print-option-card p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 cursor-pointer transition-all" data-print-type="quiz">
+                <div class="print-option-card p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 cursor-pointer transition-all"
+                    data-print-type="quiz">
                     <h4 class="font-bold text-lg text-blue-600 mb-2">📋 In Đề Thi</h4>
                     <p class="text-gray-600">In toàn bộ câu hỏi để làm bài trên giấy</p>
                     <ul class="text-sm text-gray-500 mt-2">
@@ -154,7 +235,8 @@
                         <li>• Định dạng chuẩn giáo dục</li>
                     </ul>
                 </div>
-                <div class="print-option-card p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 cursor-pointer transition-all" data-print-type="result">
+                <div class="print-option-card p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 cursor-pointer transition-all"
+                    data-print-type="result">
                     <h4 class="font-bold text-lg text-green-600 mb-2">📈 In Kết Quả Thi</h4>
                     <p class="text-gray-600">In phiếu điểm chi tiết và thống kê</p>
                     <ul class="text-sm text-gray-500 mt-2">
@@ -163,7 +245,8 @@
                         <li>• Phân tích từng câu</li>
                     </ul>
                 </div>
-                <div class="print-option-card p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 cursor-pointer transition-all" data-print-type="answerkey">
+                <div class="print-option-card p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 cursor-pointer transition-all"
+                    data-print-type="answerkey">
                     <h4 class="font-bold text-lg text-cyan-600 mb-2">🗝 In Đáp Án Chuẩn</h4>
                     <p class="text-gray-600">In đáp án đầy đủ cho giáo viên</p>
                     <ul class="text-sm text-gray-500 mt-2">
@@ -172,7 +255,8 @@
                         <li>• Bảng tra cứu nhanh</li>
                     </ul>
                 </div>
-                <div class="print-option-card p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 cursor-pointer transition-all" data-print-type="report">
+                <div class="print-option-card p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 cursor-pointer transition-all"
+                    data-print-type="report">
                     <h4 class="font-bold text-lg text-orange-600 mb-2">📉 In Báo Cáo Thống Kê</h4>
                     <p class="text-gray-600">Báo cáo chi tiết về kết quả thi</p>
                     <ul class="text-sm text-gray-500 mt-2">
@@ -215,16 +299,14 @@
         </div>
     </div>
 
-    <script src="questions.js"></script>
-    <script src="script.js"></script>
-    
     <!-- Footer -->
     <footer class="bg-gradient-to-r from-blue-50 to-purple-50 border-t border-blue-100 py-4 mt-8">
         <div class="container mx-auto px-4 text-center">
             <div class="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
                 <div class="text-sm text-blue-600">
-                    <span class="font-semibold">🐍 Ứng Dụng Thi Trắc Nghiệm Python</span>
-                    <span class="bg-blue-500 text-white px-2 py-1 rounded text-xs ml-2">v1.0</span>
+                    <span class="font-semibold">🎓 Hệ Thống Thi Trắc Nghiệm Đa Chủ Đề</span>
+                    <span
+                        class="bg-gradient-to-r from-blue-500 to-green-500 text-white px-2 py-1 rounded text-xs ml-2">v2.0</span>
                 </div>
                 <div class="text-sm text-blue-600">
                     <span class="mr-2">👨‍💻</span>
@@ -236,5 +318,12 @@
             </div>
         </div>
     </footer>
+
+    <!-- Include JS files -->
+    <script src="config.js"></script>
+    <script src="questions.js"></script>
+    <script src="questions-opensource.js"></script>
+    <script src="script.js"></script>
 </body>
+
 </html>
