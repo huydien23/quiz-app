@@ -9,9 +9,11 @@ class QuizApp {
     this.isQuizStarted = false;
     this.isQuizCompleted = false;
     this.currentConfig = null;
+    this.currentFilter = "all"; // For review filtering
 
     this.initializeElements();
     this.attachEventListeners();
+    this.loadFromLocalStorage(); // Load saved data on startup
   }
 
   initializeElements() {
@@ -53,17 +55,24 @@ class QuizApp {
     this.closePrintModalBtn = document.getElementById("closePrintModal");
     this.printArea = document.getElementById("printArea");
 
-    // Cancel modal elements
-    this.cancelModal = document.getElementById("cancelModal");
-    this.confirmCancelBtn = document.getElementById("confirmCancelBtn");
-    this.keepQuizBtn = document.getElementById("keepQuizBtn");
-
     // Results elements
     this.finalScoreElement = document.getElementById("finalScore");
     this.percentageElement = document.getElementById("percentage");
     this.resultMessageElement = document.getElementById("resultMessage");
     this.scoreIconElement = document.getElementById("scoreIcon");
     this.reviewContentElement = document.getElementById("reviewContent");
+
+    // Filter buttons
+    this.reviewCorrectBtn = document.getElementById("reviewCorrectBtn");
+    this.reviewWrongBtn = document.getElementById("reviewWrongBtn");
+    this.filterAllBtn = document.getElementById("filterAll");
+    this.filterCorrectBtn = document.getElementById("filterCorrect");
+    this.filterWrongBtn = document.getElementById("filterWrong");
+
+    // Count elements
+    this.totalCountElement = document.getElementById("totalCount");
+    this.correctCountElement = document.getElementById("correctCount");
+    this.wrongCountElement = document.getElementById("wrongCount");
 
     // Back to top button
     this.backToTopBtn = document.getElementById("backToTopBtn");
@@ -89,6 +98,33 @@ class QuizApp {
     this.reviewBtn.addEventListener("click", () => this.showReview());
     this.backToResultsBtn.addEventListener("click", () => this.showResults());
 
+    // Filter button listeners
+    if (this.reviewCorrectBtn) {
+      this.reviewCorrectBtn.addEventListener("click", () =>
+        this.showReview("correct")
+      );
+    }
+    if (this.reviewWrongBtn) {
+      this.reviewWrongBtn.addEventListener("click", () =>
+        this.showReview("wrong")
+      );
+    }
+    if (this.filterAllBtn) {
+      this.filterAllBtn.addEventListener("click", () =>
+        this.filterReview("all")
+      );
+    }
+    if (this.filterCorrectBtn) {
+      this.filterCorrectBtn.addEventListener("click", () =>
+        this.filterReview("correct")
+      );
+    }
+    if (this.filterWrongBtn) {
+      this.filterWrongBtn.addEventListener("click", () =>
+        this.filterReview("wrong")
+      );
+    }
+
     // New button event listeners
     if (this.resetQuizBtn) {
       this.resetQuizBtn.addEventListener("click", () => {
@@ -104,26 +140,7 @@ class QuizApp {
             "Bạn có chắc chắn muốn hủy bài thi không? Tất cả câu trả lời sẽ bị mất!"
           )
         ) {
-          this.directCancelQuiz();
-        }
-      });
-    }
-
-    // Cancel modal event listeners
-    if (this.confirmCancelBtn) {
-      this.confirmCancelBtn.addEventListener("click", () =>
-        this.confirmCancelQuiz()
-      );
-    }
-    if (this.keepQuizBtn) {
-      this.keepQuizBtn.addEventListener("click", () => this.hideCancelModal());
-    }
-
-    // Close modal when clicking outside
-    if (this.cancelModal) {
-      this.cancelModal.addEventListener("click", (e) => {
-        if (e.target === this.cancelModal) {
-          this.hideCancelModal();
+          this.cancelQuiz();
         }
       });
     }
@@ -181,10 +198,6 @@ class QuizApp {
       if (e.key === "r" || e.key === "R") {
         e.preventDefault();
         this.resetCurrentAnswer();
-      }
-      if (e.key === "Escape") {
-        e.preventDefault();
-        this.showCancelModal();
       }
     });
 
@@ -286,6 +299,7 @@ class QuizApp {
     this.timeRemaining = this.currentConfig.timeLimit * 60; // Convert minutes to seconds
     this.isQuizStarted = true;
     this.isQuizCompleted = false;
+    this.startTime = new Date(); // Record start time for localStorage
 
     this.showScreen("quiz");
     this.createQuestionNumbers();
@@ -293,14 +307,20 @@ class QuizApp {
     this.startTimer();
     this.updateTotalQuestions();
 
-    // Enable print button now that we have questions
+    // Save initial state to localStorage
+    this.saveToLocalStorage();
+
+    // Enable all quiz buttons
+    this.enableQuizButtons();
+  }
+
+  enableQuizButtons() {
     if (this.printQuizBtn) {
       this.printQuizBtn.disabled = false;
       this.printQuizBtn.classList.remove("opacity-50", "cursor-not-allowed");
       this.printQuizBtn.title = "In đề thi";
     }
 
-    // Enable reset and cancel buttons now that quiz has started
     if (this.resetQuizBtn) {
       this.resetQuizBtn.disabled = false;
       this.resetQuizBtn.classList.remove("opacity-50", "cursor-not-allowed");
@@ -443,6 +463,9 @@ class QuizApp {
     });
 
     this.updateQuestionNumbers();
+
+    // Save to localStorage after each answer
+    this.saveToLocalStorage();
   }
 
   goToQuestion(index) {
@@ -489,6 +512,11 @@ class QuizApp {
         this.timerElement.classList.add("timer-warning");
       }
 
+      // Save timer state every 30 seconds
+      if (this.timeRemaining % 30 === 0) {
+        this.saveToLocalStorage();
+      }
+
       if (this.timeRemaining <= 0) {
         this.submitQuiz();
       }
@@ -520,6 +548,9 @@ class QuizApp {
     this.isQuizCompleted = true;
     this.isQuizStarted = false;
     clearInterval(this.timerInterval);
+
+    // Clear localStorage when quiz is completed
+    this.clearLocalStorage();
 
     this.calculateResults();
     this.showResults();
@@ -591,10 +622,12 @@ class QuizApp {
     resultMessage.parentNode.insertBefore(scoreBreakdown, resultMessage);
 
     let message, icon;
-    
+
     // Get subject-specific information
-    const subjectName = this.currentConfig ? this.currentConfig.name : "Python Programming";
-    
+    const subjectName = this.currentConfig
+      ? this.currentConfig.name
+      : "Python Programming";
+
     if (this.percentage >= 90) {
       if (subjectName === "Python Programming") {
         message = "Xuất sắc! Bạn có kiến thức Python rất tốt!";
@@ -621,7 +654,8 @@ class QuizApp {
       if (subjectName === "Python Programming") {
         message = "Khá tốt! Bạn cần ôn luyện thêm một số kiến thức Python.";
       } else if (subjectName === "Open Source Software") {
-        message = "Khá tốt! Bạn cần ôn luyện thêm một số kiến thức về Phần mềm Nguồn Mở.";
+        message =
+          "Khá tốt! Bạn cần ôn luyện thêm một số kiến thức về Phần mềm Nguồn Mở.";
       } else {
         message = "Khá tốt! Bạn cần ôn luyện thêm một số kiến thức.";
       }
@@ -632,7 +666,8 @@ class QuizApp {
       if (subjectName === "Python Programming") {
         message = "Cần cố gắng hơn! Hãy ôn lại kiến thức Python cơ bản.";
       } else if (subjectName === "Open Source Software") {
-        message = "Cần cố gắng hơn! Hãy ôn lại kiến thức về Phần mềm Nguồn Mở cơ bản.";
+        message =
+          "Cần cố gắng hơn! Hãy ôn lại kiến thức về Phần mềm Nguồn Mở cơ bản.";
       } else {
         message = "Cần cố gắng hơn! Hãy ôn lại kiến thức cơ bản.";
       }
@@ -645,9 +680,10 @@ class QuizApp {
     this.scoreIconElement.textContent = icon;
   }
 
-  showReview() {
+  showReview(filterType = "all") {
     this.showScreen("review");
-    this.createReviewContent();
+    this.currentFilter = filterType;
+    this.renderReviewContent(filterType);
   }
 
   createReviewContent() {
@@ -719,6 +755,7 @@ class QuizApp {
     this.questions = [];
     this.timeRemaining = 60 * 60;
     this.currentConfig = null;
+    this.currentFilter = "all"; // Reset filter
 
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
@@ -726,25 +763,11 @@ class QuizApp {
 
     this.timerElement.classList.remove("timer-warning");
 
-    // Disable print button again since we're restarting
-    if (this.printQuizBtn) {
-      this.printQuizBtn.disabled = true;
-      this.printQuizBtn.classList.add("opacity-50", "cursor-not-allowed");
-      this.printQuizBtn.title = "Bắt đầu quiz để in đề";
-    }
+    // Clear localStorage when restarting
+    this.clearLocalStorage();
 
-    // Disable reset and cancel buttons again since we're restarting
-    if (this.resetQuizBtn) {
-      this.resetQuizBtn.disabled = true;
-      this.resetQuizBtn.classList.add("opacity-50", "cursor-not-allowed");
-      this.resetQuizBtn.title = "Bắt đầu quiz để sử dụng";
-    }
-
-    if (this.cancelQuizBtn) {
-      this.cancelQuizBtn.disabled = true;
-      this.cancelQuizBtn.classList.add("opacity-50", "cursor-not-allowed");
-      this.cancelQuizBtn.title = "Bắt đầu quiz để sử dụng";
-    }
+    // Disable all quiz buttons
+    this.disableQuizButtons();
 
     this.showScreen("subject");
   }
@@ -765,80 +788,18 @@ class QuizApp {
     this.showTemporaryMessage("🔄 Đã reset câu trả lời!", "success");
   }
 
-  showCancelModal() {
-    if (!this.isQuizStarted || this.isQuizCompleted) {
-      return;
-    }
-
-    if (!this.cancelModal) {
-      return;
-    }
-
-    this.cancelModal.classList.remove("hidden");
-    this.cancelModal.classList.add("flex");
-    this.cancelModal.style.display = "flex";
-  }
-
-  hideCancelModal() {
-    if (!this.cancelModal) {
-      return;
-    }
-
-    this.cancelModal.classList.add("hidden");
-    this.cancelModal.classList.remove("flex");
-    this.cancelModal.style.display = "none";
-  }
-
   confirmCancelQuiz() {
-    this.hideCancelModal();
-
-    // Stop the timer if running
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-    }
-
-    // Reset quiz state
-    this.isQuizStarted = false;
-    this.isQuizCompleted = false;
-    this.currentQuestionIndex = 0;
-    this.userAnswers = [];
-    this.questions = [];
-    this.timeRemaining = 60 * 60;
-
-    // Remove timer warning if present
-    this.timerElement.classList.remove("timer-warning");
-
-    // Disable all quiz-related buttons
-    if (this.printQuizBtn) {
-      this.printQuizBtn.disabled = true;
-      this.printQuizBtn.classList.add("opacity-50", "cursor-not-allowed");
-      this.printQuizBtn.title = "Bắt đầu quiz để in đề";
-    }
-
-    if (this.resetQuizBtn) {
-      this.resetQuizBtn.disabled = true;
-      this.resetQuizBtn.classList.add("opacity-50", "cursor-not-allowed");
-      this.resetQuizBtn.title = "Bắt đầu quiz để sử dụng";
-    }
-
-    if (this.cancelQuizBtn) {
-      this.cancelQuizBtn.disabled = true;
-      this.cancelQuizBtn.classList.add("opacity-50", "cursor-not-allowed");
-      this.cancelQuizBtn.title = "Bắt đầu quiz để sử dụng";
-    }
-
-    // Show success message and immediately redirect to start screen
-    this.showTemporaryMessage("✅ Đã hủy bài thi thành công!", "success");
-
-    // Immediately show start screen
-    this.showScreen("start");
+    this.cancelQuiz();
   }
 
-  directCancelQuiz() {
+  cancelQuiz() {
     // Stop the timer if running
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
     }
+
+    // Clear localStorage when canceling
+    this.clearLocalStorage();
 
     // Reset quiz state
     this.isQuizStarted = false;
@@ -853,6 +814,16 @@ class QuizApp {
     this.timerElement.classList.remove("timer-warning");
 
     // Disable all quiz-related buttons
+    this.disableQuizButtons();
+
+    // Show success message
+    this.showTemporaryMessage("✅ Đã hủy bài thi thành công!", "success");
+
+    // Go to subject screen
+    this.showScreen("subject");
+  }
+
+  disableQuizButtons() {
     if (this.printQuizBtn) {
       this.printQuizBtn.disabled = true;
       this.printQuizBtn.classList.add("opacity-50", "cursor-not-allowed");
@@ -870,12 +841,6 @@ class QuizApp {
       this.cancelQuizBtn.classList.add("opacity-50", "cursor-not-allowed");
       this.cancelQuizBtn.title = "Bắt đầu quiz để sử dụng";
     }
-
-    // Show success message
-    this.showTemporaryMessage("✅ Đã hủy bài thi thành công!", "success");
-
-    // Go to subject screen
-    this.showScreen("subject");
   }
 
   showTemporaryMessage(message, type = "info") {
@@ -1010,9 +975,11 @@ class QuizApp {
     }
 
     // Get subject-specific information
-    const subjectName = this.currentConfig ? this.currentConfig.name : "Python Programming";
+    const subjectName = this.currentConfig
+      ? this.currentConfig.name
+      : "Python Programming";
     let printTitle = "Đề Thi Trắc Nghiệm";
-    
+
     if (subjectName === "Python Programming") {
       printTitle = "Đề Thi Trắc Nghiệm Python";
     } else if (subjectName === "Open Source Software") {
@@ -1022,7 +989,12 @@ class QuizApp {
     try {
       const printContent = this.generateQuizPrintContent();
       this.executePrint(printContent, printTitle);
-      this.showTemporaryMessage(`✅ Đã gửi đề thi ${subjectName === "Python Programming" ? "Python" : "Phần Mềm Nguồn Mở"} đến máy in!`, "success");
+      this.showTemporaryMessage(
+        `✅ Đã gửi đề thi ${
+          subjectName === "Python Programming" ? "Python" : "Phần Mềm Nguồn Mở"
+        } đến máy in!`,
+        "success"
+      );
     } catch (error) {
       console.error("Print error:", error);
       this.showTemporaryMessage("❌ Lỗi khi in đề thi!", "error");
@@ -1043,9 +1015,11 @@ class QuizApp {
     }
 
     // Get subject-specific information
-    const subjectName = this.currentConfig ? this.currentConfig.name : "Python Programming";
+    const subjectName = this.currentConfig
+      ? this.currentConfig.name
+      : "Python Programming";
     let printTitle = "Kết Quả Thi";
-    
+
     if (subjectName === "Python Programming") {
       printTitle = "Kết Quả Thi Python";
     } else if (subjectName === "Open Source Software") {
@@ -1055,7 +1029,12 @@ class QuizApp {
     try {
       const printContent = this.generateResultPrintContent();
       this.executePrint(printContent, printTitle);
-      this.showTemporaryMessage(`✅ Đã gửi kết quả thi ${subjectName === "Python Programming" ? "Python" : "Phần Mềm Nguồn Mở"} đến máy in!`, "success");
+      this.showTemporaryMessage(
+        `✅ Đã gửi kết quả thi ${
+          subjectName === "Python Programming" ? "Python" : "Phần Mềm Nguồn Mở"
+        } đến máy in!`,
+        "success"
+      );
     } catch (error) {
       console.error("Print error:", error);
       this.showTemporaryMessage("❌ Lỗi khi in kết quả!", "error");
@@ -1072,9 +1051,11 @@ class QuizApp {
     }
 
     // Get subject-specific information
-    const subjectName = this.currentConfig ? this.currentConfig.name : "Python Programming";
+    const subjectName = this.currentConfig
+      ? this.currentConfig.name
+      : "Python Programming";
     let printTitle = "Đáp Án Chuẩn";
-    
+
     if (subjectName === "Python Programming") {
       printTitle = "Đáp Án Chuẩn Python";
     } else if (subjectName === "Open Source Software") {
@@ -1085,7 +1066,9 @@ class QuizApp {
       const printContent = this.generateAnswerKeyPrintContent();
       this.executePrint(printContent, printTitle);
       this.showTemporaryMessage(
-        `✅ Đã gửi đáp án chuẩn ${subjectName === "Python Programming" ? "Python" : "Phần Mềm Nguồn Mở"} đến máy in!`,
+        `✅ Đã gửi đáp án chuẩn ${
+          subjectName === "Python Programming" ? "Python" : "Phần Mềm Nguồn Mở"
+        } đến máy in!`,
         "success"
       );
     } catch (error) {
@@ -1105,9 +1088,11 @@ class QuizApp {
     }
 
     // Get subject-specific information
-    const subjectName = this.currentConfig ? this.currentConfig.name : "Python Programming";
+    const subjectName = this.currentConfig
+      ? this.currentConfig.name
+      : "Python Programming";
     let printTitle = "Báo Cáo Thống Kê";
-    
+
     if (subjectName === "Python Programming") {
       printTitle = "Báo Cáo Thống Kê Python";
     } else if (subjectName === "Open Source Software") {
@@ -1120,10 +1105,12 @@ class QuizApp {
 
   generateQuizPrintContent() {
     // Get subject-specific information
-    const subjectName = this.currentConfig ? this.currentConfig.name : "Python Programming";
+    const subjectName = this.currentConfig
+      ? this.currentConfig.name
+      : "Python Programming";
     let examTitle = "BÀI THI TRẮC NGHIỆM";
     let examIcon = "📋";
-    
+
     if (subjectName === "Python Programming") {
       examTitle = "BÀI THI TRẮC NGHIỆM PYTHON";
       examIcon = "🐍";
@@ -1214,10 +1201,12 @@ class QuizApp {
     const timeSpent = this.formatTimeSpent();
 
     // Get subject-specific information
-    const subjectName = this.currentConfig ? this.currentConfig.name : "Python Programming";
+    const subjectName = this.currentConfig
+      ? this.currentConfig.name
+      : "Python Programming";
     let examTitle = "PHIẾU ĐIỂM THI TRẮC NGHIỆM";
     let examIcon = "🏆";
-    
+
     if (subjectName === "Python Programming") {
       examTitle = "PHIẾU ĐIỂM THI TRẮC NGHIỆM PYTHON";
     } else if (subjectName === "Open Source Software") {
@@ -1284,9 +1273,11 @@ class QuizApp {
 
   generateAnswerKeyPrintContent() {
     // Get subject-specific information
-    const subjectName = this.currentConfig ? this.currentConfig.name : "Python Programming";
+    const subjectName = this.currentConfig
+      ? this.currentConfig.name
+      : "Python Programming";
     let examTitle = "ĐÁP ÁN CHUẨN - BÀI THI";
-    
+
     if (subjectName === "Python Programming") {
       examTitle = "ĐÁP ÁN CHUẨN - BÀI THI PYTHON";
     } else if (subjectName === "Open Source Software") {
@@ -1778,21 +1769,12 @@ QuizApp.prototype.showResults = function () {
   this.originalShowResults();
 };
 
-// Override confirmCancelQuiz to clean up mobile state
-QuizApp.prototype.originalConfirmCancelQuiz =
-  QuizApp.prototype.confirmCancelQuiz;
-QuizApp.prototype.confirmCancelQuiz = function () {
+// Override cancelQuiz to clean up mobile state
+QuizApp.prototype.originalCancelQuiz = QuizApp.prototype.cancelQuiz;
+QuizApp.prototype.cancelQuiz = function () {
   this.hideMobileNavigation();
   document.body.classList.remove("quiz-active");
-  this.originalConfirmCancelQuiz();
-};
-
-// Override directCancelQuiz to clean up mobile state
-QuizApp.prototype.originalDirectCancelQuiz = QuizApp.prototype.directCancelQuiz;
-QuizApp.prototype.directCancelQuiz = function () {
-  this.hideMobileNavigation();
-  document.body.classList.remove("quiz-active");
-  this.originalDirectCancelQuiz();
+  this.originalCancelQuiz();
 };
 
 QuizApp.prototype.showMobileInstructions = function () {
@@ -1894,6 +1876,381 @@ QuizApp.prototype.handleBackToTopVisibility = function () {
   } else {
     this.backToTopBtn.classList.remove("show");
   }
+};
+
+// Local Storage Methods
+QuizApp.prototype.saveToLocalStorage = function () {
+  if (!this.isQuizStarted) return;
+
+  // Determine subject from current config
+  let subject = null;
+  if (this.currentConfig) {
+    if (this.currentConfig === quizConfig.python) {
+      subject = "python";
+    } else if (this.currentConfig === quizConfig.opensource) {
+      subject = "opensource";
+    }
+  }
+
+  const quizData = {
+    subject: subject,
+    currentQuestionIndex: this.currentQuestionIndex,
+    userAnswers: this.userAnswers,
+    timeRemaining: this.timeRemaining,
+    questions: this.questions,
+    isQuizStarted: this.isQuizStarted,
+    startTime: this.startTime,
+  };
+
+  try {
+    localStorage.setItem("quizAppData", JSON.stringify(quizData));
+    this.showAutoSaveIndicator();
+  } catch (error) {
+    console.warn("Failed to save to localStorage:", error);
+  }
+};
+
+QuizApp.prototype.showAutoSaveIndicator = function () {
+  // Remove existing indicator if any
+  const existingIndicator = document.querySelector(".auto-save-indicator");
+  if (existingIndicator) {
+    existingIndicator.remove();
+  }
+
+  // Create new indicator
+  const indicator = document.createElement("div");
+  indicator.className = "auto-save-indicator";
+  indicator.innerHTML = "💾 Đã lưu tự động";
+
+  document.body.appendChild(indicator);
+
+  // Show indicator
+  setTimeout(() => {
+    indicator.classList.add("show");
+  }, 100);
+
+  // Hide indicator after 2 seconds
+  setTimeout(() => {
+    indicator.classList.remove("show");
+    setTimeout(() => {
+      if (indicator.parentNode) {
+        indicator.remove();
+      }
+    }, 300);
+  }, 2000);
+};
+
+QuizApp.prototype.loadFromLocalStorage = function () {
+  try {
+    const savedData = localStorage.getItem("quizAppData");
+    if (savedData) {
+      const quizData = JSON.parse(savedData);
+
+      // Validate required fields
+      if (
+        !quizData.questions ||
+        !Array.isArray(quizData.questions) ||
+        !quizData.userAnswers ||
+        !Array.isArray(quizData.userAnswers) ||
+        !quizData.subject ||
+        typeof quizData.currentQuestionIndex !== "number" ||
+        typeof quizData.timeRemaining !== "number"
+      ) {
+        console.warn("Invalid quiz data structure");
+        localStorage.removeItem("quizAppData");
+        return;
+      }
+
+      // Check if saved data is still valid (not too old)
+      const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+      const savedTime = quizData.startTime
+        ? new Date(quizData.startTime).getTime()
+        : 0;
+      const currentTime = new Date().getTime();
+
+      if (currentTime - savedTime > maxAge) {
+        localStorage.removeItem("quizAppData");
+        return;
+      }
+
+      // Show restore dialog if quiz was in progress
+      if (
+        quizData.isQuizStarted &&
+        quizData.questions &&
+        quizData.questions.length > 0 &&
+        (quizData.subject === "python" || quizData.subject === "opensource")
+      ) {
+        this.showRestoreDialog(quizData);
+      }
+    }
+  } catch (error) {
+    console.warn("Failed to load from localStorage:", error);
+    localStorage.removeItem("quizAppData");
+  }
+};
+
+QuizApp.prototype.showRestoreDialog = function (savedData) {
+  const modal = document.createElement("div");
+  modal.className =
+    "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
+
+  // Calculate some stats
+  const answeredCount = savedData.userAnswers.filter(
+    (answer) => answer !== -1
+  ).length;
+  const totalQuestions = savedData.questions.length;
+  const timeFormatted = formatTime(savedData.timeRemaining);
+  const subjectName =
+    savedData.subject === "python" ? "Python" : "Phần Mềm Nguồn Mở";
+
+  modal.innerHTML = `
+    <div class="quiz-card p-8 max-w-lg mx-4">
+      <div class="text-center">
+        <div class="text-6xl mb-4">💾</div>
+        <h3 class="text-2xl font-bold text-gray-800 mb-4">Khôi Phục Bài Thi</h3>
+        <div class="text-left bg-gray-50 p-4 rounded-lg mb-6">
+          <p class="text-gray-700 mb-2"><strong>📋 Chủ đề:</strong> ${subjectName}</p>
+          <p class="text-gray-700 mb-2"><strong>✅ Đã trả lời:</strong> ${answeredCount}/${totalQuestions} câu</p>
+          <p class="text-gray-700 mb-2"><strong>⏱️ Thời gian còn lại:</strong> ${timeFormatted}</p>
+          <p class="text-gray-700"><strong>📍 Câu hiện tại:</strong> Câu ${
+            savedData.currentQuestionIndex + 1
+          }</p>
+        </div>
+        <p class="text-gray-600 mb-6">
+          Bạn có muốn tiếp tục làm bài thi đang dở dang không?
+        </p>
+        <div class="flex space-x-4 justify-center">
+          <button id="restoreYes" class="btn btn-primary py-3 px-6 font-bold">
+            ✅ Tiếp Tục
+          </button>
+          <button id="restoreNo" class="btn btn-secondary py-3 px-6 font-bold">
+            🗑️ Bắt Đầu Mới
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Handle restore choices
+  modal.querySelector("#restoreYes").addEventListener("click", () => {
+    this.restoreQuizData(savedData);
+    modal.remove();
+  });
+
+  modal.querySelector("#restoreNo").addEventListener("click", () => {
+    localStorage.removeItem("quizAppData");
+    modal.remove();
+    this.showTemporaryMessage("🗑️ Đã xóa bài thi cũ!", "info");
+  });
+
+  // Close on outside click
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      localStorage.removeItem("quizAppData");
+      modal.remove();
+    }
+  });
+};
+
+QuizApp.prototype.restoreQuizData = function (savedData) {
+  try {
+    // Restore quiz state
+    this.questions = savedData.questions;
+    this.currentQuestionIndex = savedData.currentQuestionIndex;
+    this.userAnswers = savedData.userAnswers;
+    this.timeRemaining = savedData.timeRemaining;
+    this.isQuizStarted = true;
+    this.startTime = savedData.startTime
+      ? new Date(savedData.startTime)
+      : new Date();
+
+    // Set current config based on subject
+    if (savedData.subject === "python") {
+      this.currentConfig = quizConfig.python;
+    } else if (savedData.subject === "opensource") {
+      this.currentConfig = quizConfig.opensource;
+    } else {
+      throw new Error("Chủ đề không hợp lệ");
+    }
+
+    // Enable quiz buttons
+    this.enableQuizButtons();
+
+    // Show quiz screen and update everything
+    this.showScreen("quiz");
+    this.updateTotalQuestions();
+    this.createQuestionNumbers();
+    this.displayQuestion();
+    this.updateNavigationButtons();
+    this.startTimer();
+
+    this.showTemporaryMessage("📥 Đã khôi phục bài thi thành công!", "success");
+  } catch (error) {
+    console.error("Error restoring quiz data:", error);
+    this.clearLocalStorage();
+    this.showTemporaryMessage(
+      "❌ Lỗi khôi phục bài thi, vui lòng thử lại!",
+      "error"
+    );
+  }
+};
+
+QuizApp.prototype.clearLocalStorage = function () {
+  try {
+    localStorage.removeItem("quizAppData");
+  } catch (error) {
+    console.warn("Failed to clear localStorage:", error);
+  }
+};
+
+// Filter Review Methods
+QuizApp.prototype.filterReview = function (filterType) {
+  this.currentFilter = filterType;
+
+  // Update active filter button
+  const filterButtons = [
+    this.filterAllBtn,
+    this.filterCorrectBtn,
+    this.filterWrongBtn,
+  ];
+  filterButtons.forEach((btn) => {
+    if (btn) btn.classList.remove("active-filter");
+  });
+
+  if (filterType === "all" && this.filterAllBtn) {
+    this.filterAllBtn.classList.add("active-filter");
+  } else if (filterType === "correct" && this.filterCorrectBtn) {
+    this.filterCorrectBtn.classList.add("active-filter");
+  } else if (filterType === "wrong" && this.filterWrongBtn) {
+    this.filterWrongBtn.classList.add("active-filter");
+  }
+
+  // Re-render review content with filter
+  this.renderReviewContent(filterType);
+};
+
+QuizApp.prototype.renderReviewContent = function (filterType = "all") {
+  if (
+    !this.reviewContentElement ||
+    !this.questions ||
+    this.questions.length === 0
+  )
+    return;
+
+  let filteredQuestions = [];
+  let correctCount = 0;
+  let wrongCount = 0;
+
+  // Calculate counts and filter questions
+  this.questions.forEach((question, index) => {
+    const userAnswer = this.userAnswers[index];
+    const isCorrect = userAnswer === question.correct;
+
+    if (isCorrect) correctCount++;
+    else wrongCount++;
+
+    if (
+      filterType === "all" ||
+      (filterType === "correct" && isCorrect) ||
+      (filterType === "wrong" && !isCorrect)
+    ) {
+      filteredQuestions.push({ question, index, isCorrect, userAnswer });
+    }
+  });
+
+  // Update count displays
+  if (this.totalCountElement)
+    this.totalCountElement.textContent = this.questions.length;
+  if (this.correctCountElement)
+    this.correctCountElement.textContent = correctCount;
+  if (this.wrongCountElement) this.wrongCountElement.textContent = wrongCount;
+
+  // Render filtered content
+  this.reviewContentElement.innerHTML = "";
+
+  if (filteredQuestions.length === 0) {
+    this.reviewContentElement.innerHTML = `
+      <div class="quiz-card p-8 text-center">
+        <div class="text-6xl mb-4">🔍</div>
+        <h3 class="text-2xl font-bold text-gray-600 mb-4">Không có câu hỏi nào</h3>
+        <p class="text-gray-500">Không tìm thấy câu hỏi nào với bộ lọc hiện tại.</p>
+      </div>
+    `;
+    return;
+  }
+
+  filteredQuestions.forEach(({ question, index, isCorrect, userAnswer }) => {
+    const reviewCard = document.createElement("div");
+    reviewCard.className = `quiz-card p-6 question-review ${
+      isCorrect ? "correct-answer" : "incorrect-answer"
+    }`;
+
+    reviewCard.innerHTML = `
+      <div class="mb-4">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-lg font-bold text-blue-600">Câu ${index + 1}</span>
+          <span class="result-badge ${isCorrect ? "correct" : "incorrect"}">
+            ${isCorrect ? "✅ Đúng" : "❌ Sai"}
+          </span>
+        </div>
+        <p class="text-xl font-medium text-gray-800 mb-6">${
+          question.question
+        }</p>
+      </div>
+      <div class="space-y-3 mb-6">
+        ${question.options
+          .map((option, optionIndex) => {
+            let optionClass = "answer-option-review";
+            if (optionIndex === question.correct) {
+              optionClass += " correct-option";
+            } else if (
+              optionIndex === userAnswer &&
+              userAnswer !== question.correct
+            ) {
+              optionClass += " incorrect-option";
+            } else if (optionIndex === userAnswer) {
+              optionClass += " user-option";
+            }
+
+            return `
+            <div class="${optionClass} p-4 rounded-lg border-2">
+              <div class="flex items-center">
+                <span class="option-letter font-bold mr-3">${String.fromCharCode(
+                  65 + optionIndex
+                )}.</span>
+                <span class="flex-1">${option}</span>
+                ${
+                  optionIndex === question.correct
+                    ? '<span class="text-green-600 font-bold ml-2">✓ Đáp án đúng</span>'
+                    : ""
+                }
+                ${
+                  optionIndex === userAnswer && userAnswer !== question.correct
+                    ? '<span class="text-red-600 font-bold ml-2">✗ Bạn đã chọn</span>'
+                    : ""
+                }
+              </div>
+            </div>
+          `;
+          })
+          .join("")}
+      </div>
+      ${
+        question.explanation
+          ? `
+        <div class="explanation-box p-4 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border-l-4 border-blue-400">
+          <h4 class="font-bold text-blue-800 mb-2">💡 Giải thích:</h4>
+          <p class="text-blue-700">${question.explanation}</p>
+        </div>
+      `
+          : ""
+      }
+    `;
+
+    this.reviewContentElement.appendChild(reviewCard);
+  });
 };
 
 // Initialize the application when DOM is loaded

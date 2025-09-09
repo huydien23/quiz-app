@@ -37,37 +37,45 @@
             <!-- Subject Options -->
             <div class="grid md:grid-cols-2 gap-8 mb-8">
                 <!-- Python Quiz -->
-                <div class="quiz-subject-card bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-2xl border-2 border-blue-200 hover:border-blue-400 transition-all cursor-pointer"
+                <div class="quiz-subject-card bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-2xl border-2 border-blue-200 hover:border-blue-400 transition-all cursor-pointer h-full flex flex-col"
                     data-subject="python">
-                    <div class="text-5xl mb-4">🐍</div>
-                    <h3 class="text-2xl font-bold text-blue-800 mb-4">Lập Trình Python</h3>
-                    <div class="text-left text-blue-700 space-y-2 mb-6">
-                        <p class="flex items-center"><span class="text-green-500 mr-2">📊</span> 40 câu hỏi ngẫu nhiên
-                        </p>
-                        <p class="flex items-center"><span class="text-green-500 mr-2">⏱️</span> Thời gian: 60 phút</p>
-                        <p class="flex items-center"><span class="text-green-500 mr-2">🎯</span> Kiểm tra kiến thức
-                            Python</p>
-                        <p class="flex items-center"><span class="text-green-500 mr-2">📈</span> Điểm đạt: 60%</p>
+                    <div class="text-center flex-1">
+                        <div class="text-5xl mb-4">🐍</div>
+                        <h3 class="text-2xl font-bold text-blue-800 mb-4">Lập Trình Python</h3>
+                        <div class="text-left text-blue-700 space-y-2 mb-6 flex-1">
+                            <p class="flex items-center"><span class="text-green-500 mr-2">📊</span> 40 câu hỏi ngẫu
+                                nhiên
+                            </p>
+                            <p class="flex items-center"><span class="text-green-500 mr-2">⏱️</span> Thời gian: 60 phút
+                            </p>
+                            <p class="flex items-center"><span class="text-green-500 mr-2">🎯</span> Kiểm tra kiến thức
+                                Python</p>
+                            <p class="flex items-center"><span class="text-green-500 mr-2">📈</span> Điểm đạt: 60%</p>
+                        </div>
                     </div>
-                    <button class="btn btn-primary w-full py-3 px-6 font-bold">
+                    <button class="btn btn-primary w-full py-3 px-6 font-bold mt-auto">
                         Chọn Python
                     </button>
                 </div>
 
                 <!-- Open Source Quiz -->
-                <div class="quiz-subject-card bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-2xl border-2 border-green-200 hover:border-green-400 transition-all cursor-pointer"
+                <div class="quiz-subject-card bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-2xl border-2 border-green-200 hover:border-green-400 transition-all cursor-pointer h-full flex flex-col"
                     data-subject="opensource">
-                    <div class="text-5xl mb-4">📖</div>
-                    <h3 class="text-2xl font-bold text-green-800 mb-4">Phát Triển Phần Mềm Nguồn Mở</h3>
-                    <div class="text-left text-green-700 space-y-2 mb-6">
-                        <p class="flex items-center"><span class="text-blue-500 mr-2">📊</span> 40 câu hỏi ngẫu nhiên
-                        </p>
-                        <p class="flex items-center"><span class="text-blue-500 mr-2">⏱️</span> Thời gian: 60 phút</p>
-                        <p class="flex items-center"><span class="text-blue-500 mr-2">🎯</span> Kiểm tra kiến thức
-                            Open Source</p>
-                        <p class="flex items-center"><span class="text-blue-500 mr-2">📈</span> Điểm đạt: 60%</p>
+                    <div class="text-center flex-1">
+                        <div class="text-5xl mb-4">📖</div>
+                        <h3 class="text-2xl font-bold text-green-800 mb-4">Phát Triển Phần Mềm Nguồn Mở</h3>
+                        <div class="text-left text-green-700 space-y-2 mb-6 flex-1">
+                            <p class="flex items-center"><span class="text-blue-500 mr-2">📊</span> 40 câu hỏi ngẫu
+                                nhiên
+                            </p>
+                            <p class="flex items-center"><span class="text-blue-500 mr-2">⏱️</span> Thời gian: 60 phút
+                            </p>
+                            <p class="flex items-center"><span class="text-blue-500 mr-2">🎯</span> Kiểm tra kiến thức
+                                Open Source</p>
+                            <p class="flex items-center"><span class="text-blue-500 mr-2">📈</span> Điểm đạt: 60%</p>
+                        </div>
                     </div>
-                    <button class="btn btn-success w-full py-3 px-6 font-bold">
+                    <button class="btn btn-success w-full py-3 px-6 font-bold mt-auto">
                         Chọn Open Source
                     </button>
                 </div>
@@ -109,6 +117,8 @@
                         mỗi câu hỏi</li>
                     <li class="flex items-center"><span class="text-green-500 mr-2">🔄</span> Bạn có thể chuyển đổi giữa
                         các câu hỏi</li>
+                    <li class="flex items-center"><span class="text-green-500 mr-2">💾</span> Đáp án được lưu tự động,
+                        không lo mất dữ liệu khi reload</li>
                 </ul>
             </div>
             <button id="startBtn" class="btn btn-primary py-4 px-10 text-lg font-bold shadow-xl">
@@ -186,7 +196,13 @@
             <div class="space-y-4">
                 <div class="flex flex-wrap gap-4 justify-center">
                     <button id="reviewBtn" class="btn btn-primary py-3 px-6 font-bold">
-                        🔍 Xem Lại Đáp Án
+                        🔍 Xem Lại Tất Cả
+                    </button>
+                    <button id="reviewCorrectBtn" class="btn btn-success py-3 px-6 font-bold">
+                        ✅ Chỉ Câu Đúng
+                    </button>
+                    <button id="reviewWrongBtn" class="btn btn-error py-3 px-6 font-bold">
+                        ❌ Chỉ Câu Sai
                     </button>
                     <button id="printResultBtn" class="btn btn-print py-3 px-6 font-bold">
                         🖨️ In Kết Quả
@@ -209,9 +225,22 @@
                 <h2
                     class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 mb-6">
                     📝 Xem Lại Câu Trả Lời</h2>
-                <button id="backToResultsBtn" class="btn btn-secondary py-2 px-4 font-bold mb-4">
-                    ← Về Kết Quả
-                </button>
+                <div class="flex flex-wrap gap-4 items-center justify-between mb-6">
+                    <button id="backToResultsBtn" class="btn btn-secondary py-2 px-4 font-bold">
+                        ← Về Kết Quả
+                    </button>
+                    <div class="flex flex-wrap gap-2">
+                        <button id="filterAll" class="btn btn-secondary py-2 px-4 font-bold active-filter">
+                            📋 Tất Cả (<span id="totalCount">0</span>)
+                        </button>
+                        <button id="filterCorrect" class="btn btn-success py-2 px-4 font-bold">
+                            ✅ Đúng (<span id="correctCount">0</span>)
+                        </button>
+                        <button id="filterWrong" class="btn btn-error py-2 px-4 font-bold">
+                            ❌ Sai (<span id="wrongCount">0</span>)
+                        </button>
+                    </div>
+                </div>
             </div>
             <div id="reviewContent" class="space-y-6"></div>
         </div>

@@ -141,6 +141,17 @@ body::before {
     box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
 }
 
+.btn-error {
+    background: linear-gradient(135deg, var(--error-red) 0%, #dc2626 100%);
+    color: white;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+}
+
+.btn-error:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+}
+
 .btn-secondary {
     background: var(--white);
     color: var(--gray-600);
@@ -179,6 +190,95 @@ body::before {
     background: var(--white);
     transform: none;
     box-shadow: 0 2px 8px rgba(30, 64, 175, 0.1);
+}
+
+/* Filter Button Styles */
+.active-filter {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%) !important;
+    color: white !important;
+    border-color: var(--primary-blue) !important;
+    transform: scale(1.02) !important;
+}
+
+.filter-button {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.filter-button:hover {
+    transform: translateY(-1px);
+}
+
+/* Review Answer Option Styles */
+.answer-option-review {
+    transition: all 0.3s ease;
+    border: 2px solid #e5e7eb;
+    background: #f9fafb;
+}
+
+.correct-option {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+    border-color: #10b981 !important;
+    color: #065f46;
+}
+
+.incorrect-option {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+    border-color: #ef4444 !important;
+    color: #7f1d1d;
+}
+
+.user-option {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%);
+    border-color: #3b82f6 !important;
+}
+
+.question-review.correct-answer {
+    border-left: 4px solid #10b981;
+}
+
+.question-review.incorrect-answer {
+    border-left: 4px solid #ef4444;
+}
+
+.result-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.result-badge.correct {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.result-badge.incorrect {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+}
+
+/* Auto-save indicator */
+.auto-save-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(-20px) scale(0.8);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.auto-save-indicator.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
 }
 
 /* Subject Selection Cards */
