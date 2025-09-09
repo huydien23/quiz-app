@@ -410,6 +410,11 @@ class QuizApp {
 
   displayQuestion() {
     const question = this.questions[this.currentQuestionIndex];
+    if (!question) {
+      console.error("No question found at index", this.currentQuestionIndex);
+      return;
+    }
+
     this.questionTextElement.textContent = question.question;
     this.currentQuestionElement.textContent = this.currentQuestionIndex + 1;
 
@@ -1547,21 +1552,24 @@ QuizApp.prototype.hideMobileNavigation = function () {
 };
 
 QuizApp.prototype.createMobileFloatingNav = function () {
-  // Check if already exists
-  if (document.getElementById("mobileFloatingNav")) return;
+  // Check if already exists and remove it first
+  const existingNav = document.getElementById("mobileFloatingNav");
+  if (existingNav) {
+    existingNav.remove();
+  }
 
   const floatingNav = document.createElement("div");
   floatingNav.id = "mobileFloatingNav";
   floatingNav.className = "mobile-floating-nav";
   floatingNav.innerHTML = `
         <div class="nav-buttons">
-            <button class="nav-btn" id="mobilePrevBtn" title="Câu trước">
+            <button class="nav-btn mobile-prev-button" title="Câu trước" type="button">
                 ‹
             </button>
             <div class="question-counter" id="mobileQuestionCounter">
                 1/40
             </div>
-            <button class="nav-btn" id="mobileNextBtn" title="Câu tiếp">
+            <button class="nav-btn mobile-next-button" title="Câu tiếp" type="button">
                 ›
             </button>
         </div>
@@ -1569,15 +1577,35 @@ QuizApp.prototype.createMobileFloatingNav = function () {
 
   document.body.appendChild(floatingNav);
 
-  // Add event listeners
-  document.getElementById("mobilePrevBtn").addEventListener("click", () => {
-    this.previousQuestion();
-    this.showTemporaryMessage("← Câu trước", "info");
-  });
+  // Use event delegation instead of direct binding
+  const self = this;
+  floatingNav.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
 
-  document.getElementById("mobileNextBtn").addEventListener("click", () => {
-    this.nextQuestion();
-    this.showTemporaryMessage("Câu tiếp →", "info");
+    if (e.target.classList.contains("mobile-prev-button")) {
+      if (
+        self.isQuizStarted &&
+        !self.isQuizCompleted &&
+        self.currentQuestionIndex > 0
+      ) {
+        self.previousQuestion();
+        self.showTemporaryMessage("← Câu trước", "info");
+      } else {
+        self.showTemporaryMessage("⚠️ Đây là câu đầu tiên", "warning");
+      }
+    } else if (e.target.classList.contains("mobile-next-button")) {
+      if (
+        self.isQuizStarted &&
+        !self.isQuizCompleted &&
+        self.currentQuestionIndex < self.questions.length - 1
+      ) {
+        self.nextQuestion();
+        self.showTemporaryMessage("Câu tiếp →", "info");
+      } else {
+        self.showTemporaryMessage("⚠️ Đây là câu cuối cùng", "warning");
+      }
+    }
   });
 };
 
@@ -1598,7 +1626,7 @@ QuizApp.prototype.createMobileStickyNumbers = function () {
 };
 
 QuizApp.prototype.updateMobileNavigation = function () {
-  if (!this.isQuizStarted) return;
+  if (!this.isQuizStarted || !this.questions) return;
 
   // Update floating nav counter
   const counter = document.getElementById("mobileQuestionCounter");
@@ -1608,16 +1636,19 @@ QuizApp.prototype.updateMobileNavigation = function () {
     }`;
   }
 
-  // Update navigation buttons state
-  const prevBtn = document.getElementById("mobilePrevBtn");
-  const nextBtn = document.getElementById("mobileNextBtn");
+  // Update navigation buttons state using new class names
+  const prevBtn = document.querySelector(".mobile-prev-button");
+  const nextBtn = document.querySelector(".mobile-next-button");
 
   if (prevBtn) {
     prevBtn.disabled = this.currentQuestionIndex === 0;
+    prevBtn.style.opacity = this.currentQuestionIndex === 0 ? "0.5" : "1";
   }
 
   if (nextBtn) {
     nextBtn.disabled = this.currentQuestionIndex === this.questions.length - 1;
+    nextBtn.style.opacity =
+      this.currentQuestionIndex === this.questions.length - 1 ? "0.5" : "1";
   }
 
   // Update sticky numbers
@@ -1721,13 +1752,14 @@ QuizApp.prototype.handleSwipeGesture = function (startX, startY, endX, endY) {
 // Override displayQuestion to ensure proper mobile layout
 QuizApp.prototype.originalDisplayQuestion = QuizApp.prototype.displayQuestion;
 QuizApp.prototype.displayQuestion = function () {
+  // Call original displayQuestion
   this.originalDisplayQuestion();
 
   // Update mobile navigation
   if (window.innerWidth <= 768) {
     this.updateMobileNavigation();
-    // Scroll to top on mobile after question change
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Remove the automatic scrolling - it causes issues
+    // window.scrollTo({ top: 0, behavior: "smooth" });
   }
 };
 
@@ -2255,5 +2287,24 @@ QuizApp.prototype.renderReviewContent = function (filterType = "all") {
 
 // Initialize the application when DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
-  new QuizApp();
+  window.quizApp = new QuizApp(); // Make it global for debugging
+
+  // Add global debug methods
+  window.testNext = function () {
+    console.log("Testing next question...");
+    if (window.quizApp && window.quizApp.isQuizStarted) {
+      window.quizApp.nextQuestion();
+    } else {
+      console.log("Quiz not started or app not ready");
+    }
+  };
+
+  window.testPrev = function () {
+    console.log("Testing previous question...");
+    if (window.quizApp && window.quizApp.isQuizStarted) {
+      window.quizApp.previousQuestion();
+    } else {
+      console.log("Quiz not started or app not ready");
+    }
+  };
 });
